@@ -169,7 +169,7 @@ export default function PreviewCanvas({
       const link = document.createElement('link');
       link.id = linkId;
       link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Zhi+Mang+Xing&family=Ma+Shan+Zheng&family=Long+Cang&family=ZCOOL+XiaoWei&family=ZCOOL+QingKe+HuangYou&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;700&family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Sacramento&family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&display=swap';
+      link.href = 'https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;700&family=Dancing+Script:wght@400;700&family=Montserrat:wght@400;500;700&family=Great+Vibes&display=swap';
       document.head.appendChild(link);
     }
   }, []);
