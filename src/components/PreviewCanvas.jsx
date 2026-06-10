@@ -87,32 +87,32 @@ export default function PreviewCanvas({
 
   // 縮放設定
   const scale = {
-    headerMarginBottom: isStory ? '16px' : isPortrait ? (isCompactGrid ? '2px' : '4px') : (isCompactGrid ? '1px' : '2px'),
-    headerMarginTop: isStory ? '10px' : isPortrait ? '0px' : '0px',
-    monthFontSize: isStory ? '60px' : isPortrait ? (isCompactGrid ? '34px' : '38px') : (isCompactGrid ? '24px' : '28px'),
+    headerMarginBottom: isStory ? (isCompactGrid ? '8px' : '16px') : isPortrait ? (isCompactGrid ? '2px' : '4px') : (isCompactGrid ? '1px' : '2px'),
+    headerMarginTop: isStory ? (isCompactGrid ? '2px' : '10px') : isPortrait ? '0px' : '0px',
+    monthFontSize: isStory ? (isCompactGrid ? '50px' : '60px') : isPortrait ? (isCompactGrid ? '34px' : '38px') : (isCompactGrid ? '24px' : '28px'),
     yearFontSize: isStory ? '13px' : isPortrait ? '10px' : '9px',
     enMonthFontSize: isStory ? '20px' : isPortrait ? '14px' : '12px',
-    mainTitleFontSize: isStory ? '26px' : isPortrait ? (isCompactGrid ? '14px' : '16px') : (isCompactGrid ? '12px' : '13px'),
+    mainTitleFontSize: isStory ? (isCompactGrid ? '20px' : '26px') : isPortrait ? (isCompactGrid ? '14px' : '16px') : (isCompactGrid ? '12px' : '13px'),
     subSloganFontSize: isStory ? '11px' : isPortrait ? '8.5px' : '7.5px',
     staffNameFontSize: isStory ? '13px' : isPortrait ? '10px' : '8.5px',
     staffNamePadding: isStory ? '4px 16px' : isPortrait ? '2px 8px' : '1px 6px',
     
-    calendarPadding: isStory ? '10px' : isPortrait ? (isCompactGrid ? '6px' : '8px') : (isCompactGrid ? '4px' : '6px'),
-    calendarMinHeight: isStory ? '440px' : isPortrait ? (isCompactGrid ? '250px' : '280px') : (isCompactGrid ? '190px' : '210px'),
+    calendarPadding: isStory ? (isCompactGrid ? '8px' : '10px') : isPortrait ? (isCompactGrid ? '6px' : '8px') : (isCompactGrid ? '4px' : '6px'),
+    calendarMinHeight: isStory ? (isCompactGrid ? '400px' : '440px') : isPortrait ? (isCompactGrid ? '250px' : '280px') : (isCompactGrid ? '190px' : '210px'),
     calendarHeaderFontSize: isStory ? '10px' : isPortrait ? '9px' : '8px',
     
-    dayFontSize: isStory ? '13px' : isPortrait ? (isCompactGrid ? '9.5px' : '10.5px') : (isCompactGrid ? '8.5px' : '9.5px'),
-    slotFontSize: isStory ? '10px' : isPortrait ? (isCompactGrid ? '8px' : '8.5px') : (isCompactGrid ? '7px' : '7.5px'),
-    slotPadding: isStory ? '2px 4px' : isPortrait ? (isCompactGrid ? '1px 1.5px' : '1.5px 2px') : (isCompactGrid ? '0.5px 1px' : '1px 2px'),
-    cellPadding: isStory ? '4px' : isPortrait ? '2px' : '1px',
+    dayFontSize: isStory ? (isCompactGrid ? '11px' : '13px') : isPortrait ? (isCompactGrid ? '9.5px' : '10.5px') : (isCompactGrid ? '8.5px' : '9.5px'),
+    slotFontSize: isStory ? (isCompactGrid ? '8.5px' : '10px') : isPortrait ? (isCompactGrid ? '8px' : '8.5px') : (isCompactGrid ? '7px' : '7.5px'),
+    slotPadding: isStory ? (isCompactGrid ? '1.5px 3px' : '2px 4px') : isPortrait ? (isCompactGrid ? '1px 1.5px' : '1.5px 2px') : (isCompactGrid ? '0.5px 1px' : '1px 2px'),
+    cellPadding: isStory ? (isCompactGrid ? '2.5px' : '4px') : isPortrait ? '2px' : '1px',
     
-    footerHeight: isStory ? '115px' : isPortrait ? (isCompactGrid ? '70px' : '80px') : (isCompactGrid ? '50px' : '60px'),
-    footerNotesFontSize: isStory ? '10.5px' : isPortrait ? '8.5px' : '7px',
-    footerNotesLineHeight: isStory ? '1.5' : isPortrait ? '1.3' : '1.15',
+    footerHeight: isStory ? (isCompactGrid ? '100px' : '115px') : isPortrait ? (isCompactGrid ? '70px' : '80px') : (isCompactGrid ? '50px' : '60px'),
+    footerNotesFontSize: isStory ? (isCompactGrid ? '9px' : '10.5px') : isPortrait ? '8.5px' : '7px',
+    footerNotesLineHeight: isStory ? (isCompactGrid ? '1.35' : '1.5') : isPortrait ? '1.3' : '1.15',
     footerLogoFontSize: isStory ? '14px' : isPortrait ? '10px' : '8.5px',
     footerSloganFontSize: isStory ? '8.5px' : isPortrait ? '7.5px' : '6px',
     footerLogoIconSize: isStory ? '22px' : isPortrait ? '16px' : '12px',
-    qrSize: isStory ? '56px' : isPortrait ? '38px' : '30px',
+    qrSize: isStory ? (isCompactGrid ? '48px' : '56px') : isPortrait ? '38px' : '30px',
     qrLabelFontSize: isStory ? '9px' : isPortrait ? '7.5px' : '6.5px',
     qrDescFontSize: isStory ? '7.5px' : isPortrait ? '6.5px' : '5px'
   };
@@ -382,10 +382,10 @@ export default function PreviewCanvas({
         {/* ================= B. 右側主日曆版面 (或在水平版面下之主版面) ================= */}
         <div style={{
           flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          height: '100%'
+          display: 'grid',
+          gridTemplateRows: isSidebarLayout ? 'auto 1fr' : 'auto 1fr auto',
+          height: '100%',
+          boxSizing: 'border-box'
         }}>
           {/* Header 區塊 */}
           <div style={{ 
@@ -473,15 +473,15 @@ export default function PreviewCanvas({
 
           {/* Calendar Grid 區塊 */}
           <div style={{
-            flexGrow: 1,
+            height: '100%',
+            minHeight: 0,
             backgroundColor: themeColors.cardBg,
             border: `1px solid ${themeColors.border}`,
             borderRadius: '8px',
             padding: scale.calendarPadding,
             display: 'grid',
             gridTemplateRows: 'auto 1fr',
-            boxShadow: '0 6px 15px rgba(0,0,0,0.01)',
-            minHeight: scale.calendarMinHeight
+            boxShadow: '0 6px 15px rgba(0,0,0,0.01)'
           }}>
             {/* 星期 Header */}
             <div style={{
