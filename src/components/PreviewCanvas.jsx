@@ -401,11 +401,35 @@ export default function PreviewCanvas({
               </div>
             </div>
 
-            {/* 右側：隱形佔位區以維持標題置中對齊 */}
+            {/* 右側：精緻植物葉片線條插圖以點綴並維持標題置中 */}
             <div style={{
               width: isStory ? '100px' : isPortrait ? '80px' : '70px',
-              flexShrink: 0
-            }} />
+              height: isStory ? '90px' : isPortrait ? '70px' : '60px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexShrink: 0,
+              position: 'relative'
+            }}>
+              <div style={{
+                width: isStory ? '60px' : isPortrait ? '48px' : '40px',
+                height: isStory ? '60px' : isPortrait ? '48px' : '40px',
+                opacity: 0.45,
+                color: theme.id === 'pinkFloral' ? themeColors.textSecondary : themeColors.accent,
+                transform: 'rotate(-15deg)',
+                pointerEvents: 'none'
+              }}>
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.3">
+                  {/* Stem curving from bottom-left to top-right */}
+                  <path d="M 15 85 Q 50 65, 80 20" strokeLinecap="round" />
+                  {/* Leaves branching off */}
+                  <path d="M 35 68 C 22 60, 18 45, 24 38 C 28 35, 34 42, 38 52" strokeLinecap="round" />
+                  <path d="M 45 58 C 58 55, 66 40, 60 32 C 55 28, 48 35, 46 45" strokeLinecap="round" />
+                  <path d="M 58 42 C 48 35, 42 20, 48 12 C 52 8, 58 15, 60 25" strokeLinecap="round" />
+                  <path d="M 80 20 C 82 12, 75 5, 68 8 C 65 10, 68 18, 80 20" strokeLinecap="round" />
+                </svg>
+              </div>
+            </div>
           </div>
 
               {/* Calendar Grid 區塊 */}
@@ -666,229 +690,215 @@ export default function PreviewCanvas({
 
           {/* ================= C. 水平排版時的底部資訊欄 (對稱設計，無邊框卡片，比照設計圖) ================= */}
           <div style={{
+            display: 'flex',
+            flexShrink: 0,
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+            marginTop: isStory ? '14px' : isPortrait ? '10px' : '8px',
+            backgroundColor: themeColors.cardBg,
+            border: `1.5px solid ${themeColors.border}`,
+            borderRadius: '18px',
+            padding: isStory ? '12px 16px' : isPortrait ? '10px 12px' : '8px 10px',
+            boxShadow: '0 8px 30px rgba(108, 83, 63, 0.04)',
+            height: scale.footerHeight,
+            boxSizing: 'border-box',
+            width: '100%',
+            gap: isStory ? '16px' : '10px',
+            position: 'relative'
+          }}>
+            {/* 1. 左側：預約須知 */}
+            <div style={{
+              flex: '1 1 0px',
+              minWidth: 0,
               display: 'flex',
-              flexShrink: 0,
-              justifyContent: 'space-between',
-              alignItems: 'stretch',
-              marginTop: isStory ? '14px' : isPortrait ? '10px' : '8px',
-              gap: isStory ? '16px' : '10px',
-              height: scale.footerHeight,
-              boxSizing: 'border-box',
-              width: '100%',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              overflow: 'hidden'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+                <span style={{ 
+                  color: themeColors.textPrimary,
+                  fontSize: isStory ? '10.5px' : isPortrait ? '9px' : '8px',
+                  fontWeight: '700',
+                  letterSpacing: '1px'
+                }}>
+                  ✦ 預約須知
+                </span>
+              </div>
+              <ul style={{ 
+                margin: 0, 
+                padding: '0 0 0 10px', 
+                fontSize: scale.footerNotesFontSize, 
+                lineHeight: scale.footerNotesLineHeight,
+                opacity: 0.9,
+                listStyleType: 'disc',
+                color: themeColors.textPrimary
+              }}>
+                {notesList.slice(0, isSquare ? 2 : 3).map((item, idx) => (
+                  <li key={idx} style={{ 
+                    marginBottom: '1px', 
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    lineHeight: 1.25
+                  }}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 分隔線 (Divider) */}
+            <div style={{
+              width: '1px',
+              backgroundColor: `${themeColors.border}E0`,
+              margin: '6px 0'
+            }} />
+
+            {/* 2. 中間：品牌商標 Logo */}
+            <div style={{
+              flex: isStory ? '0 0 140px' : isPortrait ? '0 0 120px' : '0 0 100px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              overflow: 'hidden',
               padding: '0 4px'
             }}>
-              {/* 左側：預約須知 */}
-              <div style={{
-                flex: '1 1 0px',
-                minWidth: 0,
+              <div style={{ 
+                width: hideBrandText 
+                  ? '70%' 
+                  : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.5)` : `calc(${scale.footerLogoIconSize} * 1.8)`), 
+                height: hideBrandText 
+                  ? '70%' 
+                  : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.5)` : `calc(${scale.footerLogoIconSize} * 1.8)`), 
+                color: themeColors.textSecondary, 
+                marginBottom: hideBrandText ? '0px' : '3px',
                 display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                overflow: 'hidden'
-              }}>
-                {/* 預約須知 pill header */}
-                <div style={{ marginBottom: '6px' }}>
-                  <span style={{
-                    fontSize: isStory ? '10px' : '8.5px',
-                    fontWeight: 'bold',
-                    padding: isStory ? '3px 12px' : '2px 8px',
-                    borderRadius: '20px',
-                    color: '#FFFFFF',
-                    backgroundColor: themeColors.headerBg,
-                    letterSpacing: '1px',
-                    lineHeight: 1,
-                    display: 'inline-block'
-                  }}>
-                    預約須知
-                  </span>
-                </div>
-                <div style={{
-                  border: `1.5px solid ${themeColors.border}`,
-                  borderRadius: '16px',
-                  padding: isStory ? '10px 12px' : isPortrait ? '8px 10px' : '6px 8px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.45)',
-                  marginTop: isStory ? '4px' : '2px',
-                  boxShadow: '0 4px 15px rgba(108, 83, 63, 0.02)',
-                  flexGrow: 1,
-                  overflow: 'hidden'
-                }}>
-                  <ul style={{ 
-                    margin: 0, 
-                    padding: '0 4px 0 12px', 
-                    fontSize: scale.footerNotesFontSize, 
-                    lineHeight: scale.footerNotesLineHeight,
-                    opacity: 0.9,
-                    listStyleType: 'disc',
-                    color: themeColors.textPrimary
-                  }}>
-                    {notesList.slice(0, isSquare ? 2 : 3).map((item, idx) => (
-                      <li key={idx} style={{ 
-                        marginBottom: '2.5px', 
-                        overflow: 'hidden', 
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        lineHeight: 1.25
-                      }}>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              {/* 中間：品牌商標 Logo (固定寬度，完美置中，無邊框) */}
-              <div style={{
-                flex: isStory ? '0 0 150px' : isPortrait ? '0 0 125px' : '0 0 105px',
-                display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                padding: '2px 4px',
-                textAlign: 'center',
-                overflow: 'hidden'
+                justifyContent: 'center'
               }}>
-                <div style={{ 
-                  width: hideBrandText 
-                    ? '80%' 
-                    : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.6)` : `calc(${scale.footerLogoIconSize} * 2.2)`), 
-                  height: hideBrandText 
-                    ? '80%' 
-                    : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.6)` : `calc(${scale.footerLogoIconSize} * 2.2)`), 
-                  color: themeColors.textSecondary, 
-                  marginBottom: hideBrandText ? '0px' : '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  {logoImgUrl ? (
-                    <img src={logoImgUrl} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-                  ) : (
-                    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.1" style={{ width: '100%', height: '100%' }}>
-                      {/* Elegant curved stem */}
-                      <path d="M 50 90 C 50 70, 52 50, 45 20" strokeLinecap="round" />
-                      
-                      {/* Graceful leaves */}
-                      {/* Left Leaf 1 */}
-                      <path d="M 49 70 C 40 68, 32 60, 35 52 C 38 48, 46 52, 49.5 60" strokeLinecap="round" />
-                      {/* Right Leaf 1 */}
-                      <path d="M 50 65 C 60 63, 68 55, 65 47 C 62 43, 54 47, 50.5 55" strokeLinecap="round" />
-                      
-                      {/* Left Leaf 2 */}
-                      <path d="M 48 48 C 38 46, 30 38, 33 30 C 36 26, 44 30, 47.5 38" strokeLinecap="round" />
-                      {/* Right Leaf 2 */}
-                      <path d="M 47 43 C 57 41, 65 33, 62 25 C 59 21, 51 25, 47.5 33" strokeLinecap="round" />
-                      
-                      {/* Top leaf */}
-                      <path d="M 45 20 C 43 12, 47 5, 52 10 C 55 14, 51 18, 45 20" strokeLinecap="round" />
-
-                      {/* Sparkles */}
-                      <path d="M 23 28 L 25 30 L 28 31 L 25 32 L 23 34 L 21 32 L 18 31 L 21 30 Z" fill="currentColor" opacity="0.8" stroke="none" />
-                      <path d="M 75 42 L 76 44 L 79 45 L 76 46 L 75 48 L 74 46 L 71 45 L 74 44 Z" fill="currentColor" opacity="0.8" stroke="none" />
-                      <path d="M 32 10 L 33 11.5 L 35 12 L 33 12.5 L 32 14 L 31 12.5 L 29 12 L 31 11.5 Z" fill="currentColor" opacity="0.8" stroke="none" />
-                    </svg>
-                  )}
-                </div>
-                {!hideBrandText && (
-                  <>
-                    <h3 style={{ 
-                      fontSize: theme.id === 'pinkFloral' ? `calc(${scale.footerLogoFontSize} * 1.5)` : scale.footerLogoFontSize, 
-                      fontWeight: theme.id === 'pinkFloral' ? 'normal' : 'bold', 
-                      margin: '0 0 2px 0', 
-                      letterSpacing: '1px',
-                      whiteSpace: 'nowrap',
-                      color: themeColors.textPrimary,
-                      fontFamily: theme.id === 'pinkFloral' ? '"Great Vibes", "Dancing Script", cursive' : selectedFont.titleFontFamily
-                    }}>
-                      {brandName}
-                    </h3>
-                    <p style={{ 
-                      fontSize: scale.footerSloganFontSize, 
-                      margin: 0, 
-                      opacity: 0.8, 
-                      fontStyle: 'italic',
-                      whiteSpace: 'nowrap',
-                      color: themeColors.textSecondary
-                    }}>
-                      {slogan}
-                    </p>
-                  </>
+                {logoImgUrl ? (
+                  <img src={logoImgUrl} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                ) : (
+                  <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.2" style={{ width: '100%', height: '100%' }}>
+                    <path d="M 50 90 C 50 70, 52 50, 45 20" strokeLinecap="round" />
+                    <path d="M 49 70 C 40 68, 32 60, 35 52 C 38 48, 46 52, 49.5 60" strokeLinecap="round" />
+                    <path d="M 50 65 C 60 63, 68 55, 65 47 C 62 43, 54 47, 50.5 55" strokeLinecap="round" />
+                    <path d="M 48 48 C 38 46, 30 38, 33 30 C 36 26, 44 30, 47.5 38" strokeLinecap="round" />
+                    <path d="M 47 43 C 57 41, 65 33, 62 25 C 59 21, 51 25, 47.5 33" strokeLinecap="round" />
+                    <path d="M 45 20 C 43 12, 47 5, 52 10 C 55 14, 51 18, 45 20" strokeLinecap="round" />
+                    <path d="M 23 28 L 25 30 L 28 31 L 25 32 L 23 34 L 21 32 L 18 31 L 21 30 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                    <path d="M 75 42 L 76 44 L 79 45 L 76 46 L 75 48 L 74 46 L 71 45 L 74 44 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                    <path d="M 32 10 L 33 11.5 L 35 12 L 33 12.5 L 32 14 L 31 12.5 L 29 12 L 31 11.5 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                  </svg>
                 )}
               </div>
-
-              {/* 右側：QR Code 區塊 */}
-              <div style={{
-                flex: '1 1 0px',
-                minWidth: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                overflow: 'hidden'
-              }}>
-                {/* 立即預約 pill header */}
-                <div style={{ marginBottom: '6px' }}>
-                  <span style={{
-                    fontSize: isStory ? '10px' : '8.5px',
-                    fontWeight: 'bold',
-                    padding: isStory ? '3px 12px' : '2px 8px',
-                    borderRadius: '20px',
-                    color: '#FFFFFF',
-                    backgroundColor: themeColors.headerBg,
+              {!hideBrandText && (
+                <>
+                  <h3 style={{ 
+                    fontSize: theme.id === 'pinkFloral' ? `calc(${scale.footerLogoFontSize} * 1.35)` : scale.footerLogoFontSize, 
+                    fontWeight: theme.id === 'pinkFloral' ? 'normal' : 'bold', 
+                    margin: '0 0 1px 0', 
                     letterSpacing: '1px',
-                    lineHeight: 1,
-                    display: 'inline-block'
+                    whiteSpace: 'nowrap',
+                    color: themeColors.textPrimary,
+                    fontFamily: theme.id === 'pinkFloral' ? '"Great Vibes", "Dancing Script", cursive' : selectedFont.titleFontFamily
                   }}>
-                    立即預約 ⇦
-                  </span>
-                </div>
+                    {brandName}
+                  </h3>
+                  <p style={{ 
+                    fontSize: scale.footerSloganFontSize, 
+                    margin: 0, 
+                    opacity: 0.8, 
+                    fontStyle: 'italic',
+                    whiteSpace: 'nowrap',
+                    color: themeColors.textSecondary
+                  }}>
+                    {slogan}
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* 分隔線 (Divider) */}
+            <div style={{
+              width: '1px',
+              backgroundColor: `${themeColors.border}E0`,
+              margin: '6px 0'
+            }} />
+
+            {/* 3. 右側：立即預約 QR Code */}
+            <div style={{
+              flex: '1 1 0px',
+              minWidth: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              overflow: 'hidden',
+              paddingLeft: isStory ? '8px' : '4px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+                <span style={{ 
+                  color: themeColors.textPrimary,
+                  fontSize: isStory ? '10.5px' : isPortrait ? '9px' : '8px',
+                  fontWeight: '700',
+                  letterSpacing: '1px'
+                }}>
+                  ✦ 立即預約
+                </span>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: isStory ? '8px' : '4px',
+                width: '100%'
+              }}>
                 <div style={{
+                  border: `1px solid ${themeColors.border}80`,
+                  padding: '1px',
+                  borderRadius: '8px',
+                  backgroundColor: '#FFFFFF',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: isStory ? '8px' : '4px',
-                  width: '100%',
-                  justifyContent: 'flex-end'
+                  justifyContent: 'center',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
+                  flexShrink: 0
                 }}>
-                  <div style={{
-                    border: `1.5px solid ${themeColors.border}`,
-                    padding: '2px',
-                    borderRadius: '12px',
-                    backgroundColor: '#FFFFFF',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 4px 12px rgba(108, 83, 63, 0.03)'
+                  <QRCodeGen url={qrUrl} color={themeColors.textPrimary} size={scale.qrSize} />
+                </div>
+                <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'center',
+                  minWidth: 0,
+                  textAlign: 'left'
+                }}>
+                  <p style={{ 
+                    fontSize: scale.qrDescFontSize, 
+                    margin: 0, 
+                    opacity: 0.9, 
+                    lineHeight: 1.2,
+                    fontWeight: '500',
+                    color: themeColors.textPrimary,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    wordBreak: 'break-all',
+                    whiteSpace: 'pre-line'
                   }}>
-                    <QRCodeGen url={qrUrl} color={themeColors.textPrimary} size={scale.qrSize} />
-                  </div>
-                  <div style={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    justifyContent: 'center',
-                    minWidth: 0,
-                    textAlign: 'left'
-                  }}>
-                    <p style={{ 
-                      fontSize: scale.qrDescFontSize, 
-                      margin: 0, 
-                      opacity: 0.9, 
-                      lineHeight: 1.25,
-                      fontWeight: '500',
-                      color: themeColors.textPrimary,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      wordBreak: 'break-all',
-                      whiteSpace: 'pre-line'
-                    }}>
-                      {qrText}
-                    </p>
-                  </div>
+                    {qrText}
+                  </p>
                 </div>
               </div>
             </div>
+          </div>
 
           {/* 底部小字 */}
           <div style={{
