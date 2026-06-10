@@ -37,7 +37,6 @@ export default function EditorPanel({
   scheduleData, setScheduleData,
   customBgUrl, setCustomBgUrl,
   logoImgUrl, setLogoImgUrl,
-  heroImgUrl, setHeroImgUrl,
   hideBrandText, setHideBrandText,
   onExportPng
 }) {
@@ -48,7 +47,6 @@ export default function EditorPanel({
   const [activeTab, setActiveTab] = useState('text-import'); // 'text-import', 'basic-info', 'style', 'slots-edit'
   const fileInputRef = useRef(null);
   const logoInputRef = useRef(null);
-  const heroInputRef = useRef(null);
   const customBgInputRef = useRef(null);
 
   // 批次設定時段用狀態
@@ -150,17 +148,7 @@ export default function EditorPanel({
     reader.readAsDataURL(file);
   };
 
-  // 作品展示照片上傳
-  const handleHeroUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setHeroImgUrl(event.target.value || event.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
 
   // 批次套用時段
   const handleApplyBatch = () => {
@@ -510,47 +498,7 @@ export default function EditorPanel({
               />
             </div>
 
-            {/* 作品展示照片 */}
-            <div className="form-group">
-              <label>作品展示照片 (Header Photo)</label>
-              {heroImgUrl ? (
-                <div className="logo-preview-wrap">
-                  <div 
-                    className="logo-preview-thumbnail" 
-                    style={{ 
-                      backgroundImage: `url(${heroImgUrl})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundColor: 'rgba(255,255,255,0.05)'
-                    }}
-                  />
-                  <button 
-                    type="button"
-                    className="btn btn-danger btn-sm"
-                    onClick={() => setHeroImgUrl('')}
-                  >
-                    移除照片
-                  </button>
-                </div>
-              ) : (
-                <button 
-                  type="button"
-                  className="btn btn-secondary btn-sm w-full"
-                  onClick={() => heroInputRef.current?.click()}
-                >
-                  <Upload size={14} style={{ marginRight: '6px' }} />
-                  上傳作品展示照片
-                </button>
-              )}
-              <input 
-                type="file" 
-                ref={heroInputRef} 
-                onChange={handleHeroUpload} 
-                accept="image/*" 
-                style={{ display: 'none' }} 
-              />
-            </div>
+
 
             <div className="form-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '8px', padding: '4px 0' }}>
               <input 

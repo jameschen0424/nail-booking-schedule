@@ -1,10 +1,6 @@
 import { useRef, useEffect } from 'react';
 import QRCodeGen from './Common/QRCodeGen';
-import defaultHeroImg from '../assets/hero.png';
 import pinkFloralBg from '../assets/pink_floral_bg.png';
-import heroGreen from '../assets/hero_green.png';
-import heroBeige from '../assets/hero_beige.png';
-import heroPink from '../assets/hero_pink.png';
 
 export default function PreviewCanvas({ 
   year, 
@@ -25,7 +21,6 @@ export default function PreviewCanvas({
   customBgUrl, 
   logoImgUrl,
   hideBrandText,
-  heroImgUrl,
   exportRef 
 }) {
 
@@ -140,12 +135,7 @@ export default function PreviewCanvas({
 
   const themeColors = theme.colors;
 
-  const getDefaultHeroImage = () => {
-    if (theme.id === 'pinkFloral') return heroPink;
-    if (theme.id === 'beigeLuxury') return heroBeige;
-    return heroGreen;
-  };
-  const activeHeroImg = heroImgUrl || getDefaultHeroImage();
+
 
   // 背景圖風格
   const backgroundStyle = customBgUrl ? {
@@ -411,35 +401,11 @@ export default function PreviewCanvas({
               </div>
             </div>
 
-            {/* 右側：作品展示照片 */}
+            {/* 右側：隱形佔位區以維持標題置中對齊 */}
             <div style={{
               width: isStory ? '100px' : isPortrait ? '80px' : '70px',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
               flexShrink: 0
-            }}>
-              <div style={{
-                width: isStory ? '75px' : isPortrait ? '60px' : '52px',
-                height: isStory ? '105px' : isPortrait ? '85px' : '75px',
-                borderRadius: '8px',
-                border: '2px solid #FFFFFF',
-                boxShadow: '0 6px 15px rgba(0,0,0,0.12)',
-                overflow: 'hidden',
-                transform: 'rotate(5deg)',
-                backgroundColor: '#FFFFFF'
-              }}>
-                <img 
-                  src={activeHeroImg} 
-                  alt="Nail Art Work" 
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover' 
-                  }} 
-                />
-              </div>
-            </div>
+            }} />
           </div>
 
               {/* Calendar Grid 區塊 */}

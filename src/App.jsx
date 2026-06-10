@@ -23,7 +23,6 @@ export default function App() {
     const savedThemeId = getLocalStorageValue('salon_theme_id', 'sageGreen');
     return THEMES[savedThemeId] || THEMES.sageGreen;
   });
-  const [heroImgUrl, setHeroImgUrl] = useState(() => getLocalStorageValue('salon_heroImgUrl', ''));
   const [aspectRatio, setAspectRatio] = useState(() => getLocalStorageValue('salon_aspectRatio', 'story'));
   const [fontStyle, setFontStyle] = useState(() => getLocalStorageValue('salon_fontStyle', 'serif'));
   const [title, setTitle] = useState(() => getLocalStorageValue('salon_title', '美甲預約表'));
@@ -156,17 +155,7 @@ export default function App() {
     }
   }, [customBgUrl]);
 
-  useEffect(() => {
-    try {
-      if (heroImgUrl) {
-        window.localStorage.setItem('salon_heroImgUrl', JSON.stringify(heroImgUrl));
-      } else {
-        window.localStorage.removeItem('salon_heroImgUrl');
-      }
-    } catch (e) {
-      console.warn('Failed to save hero base64 image:', e);
-    }
-  }, [heroImgUrl]);
+
 
   // 動態計算縮放比例以適應視窗大小
   useEffect(() => {
@@ -329,7 +318,6 @@ export default function App() {
           scheduleData={scheduleData} setScheduleData={setScheduleData}
           customBgUrl={customBgUrl} setCustomBgUrl={setCustomBgUrl}
           logoImgUrl={logoImgUrl} setLogoImgUrl={setLogoImgUrl}
-          heroImgUrl={heroImgUrl} setHeroImgUrl={setHeroImgUrl}
           hideBrandText={hideBrandText} setHideBrandText={setHideBrandText}
           onExportPng={handleExport}
         />
@@ -377,7 +365,6 @@ export default function App() {
             scheduleData={scheduleData}
             customBgUrl={customBgUrl}
             logoImgUrl={logoImgUrl}
-            heroImgUrl={heroImgUrl}
             hideBrandText={hideBrandText}
             exportRef={exportRef}
           />
