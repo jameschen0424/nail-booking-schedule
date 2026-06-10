@@ -605,7 +605,7 @@ export default function PreviewCanvas({
               minHeight: 0,
               height: '100%',
               gap: '1px',
-              backgroundColor: theme.id === 'pinkFloral' ? '#FADCE1' : `${themeColors.border}a0`
+              backgroundColor: theme.id === 'pinkFloral' ? '#FADCE1' : themeColors.border
             }}>
               {calendarCells.map((cell, index) => {
                 if (cell.empty) {
@@ -632,8 +632,8 @@ export default function PreviewCanvas({
                         justifyContent: 'flex-start',
                         alignItems: 'stretch',
                         backgroundColor: isTodayOff 
-                          ? (theme.id === 'pinkFloral' ? 'rgba(255,255,255,0.1)' : 'transparent')
-                          : 'rgba(255,255,255,0.9)',
+                          ? (theme.id === 'pinkFloral' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.45)')
+                          : 'rgba(255, 255, 255, 0.9)',
                         opacity: isTodayOff ? 0.85 : 1,
                         boxSizing: 'border-box',
                         overflow: 'hidden',
@@ -878,28 +878,27 @@ export default function PreviewCanvas({
                     <img src={logoImgUrl} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
                   ) : (
                     <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.1" style={{ width: '100%', height: '100%' }}>
-                      {/* Wrist/arm line */}
-                      <path d="M 40 90 C 42 80, 45 72, 47 62 C 48 57, 46 54, 43 51" strokeLinecap="round" />
-                      <path d="M 52 90 C 53 82, 54 75, 55 65" strokeLinecap="round" />
+                      {/* Elegant curved stem */}
+                      <path d="M 50 90 C 50 70, 52 50, 45 20" strokeLinecap="round" />
                       
-                      {/* Slender fingers curved gracefully */}
-                      <path d="M 43 51 C 41 42, 38 27, 43 14 C 44 11, 47 11, 48 18 C 49 25, 47 42, 47 48" strokeLinecap="round" />
-                      <path d="M 47 48 C 47 38, 46 20, 50 8 C 51 5, 54 5, 55 14 C 56 23, 54 42, 53 48" strokeLinecap="round" />
-                      <path d="M 53 48 C 53 39, 53 23, 56 12 C 57 9, 60 9, 60 18 C 60 27, 58 43, 57 49" strokeLinecap="round" />
-                      <path d="M 57 49 C 57 42, 59 30, 61 22 C 62 19, 65 19, 65 27 C 65 35, 62 48, 60 56" strokeLinecap="round" />
-                      <path d="M 60 56 C 59 62, 56 65, 55 65" strokeLinecap="round" />
+                      {/* Graceful leaves */}
+                      {/* Left Leaf 1 */}
+                      <path d="M 49 70 C 40 68, 32 60, 35 52 C 38 48, 46 52, 49.5 60" strokeLinecap="round" />
+                      {/* Right Leaf 1 */}
+                      <path d="M 50 65 C 60 63, 68 55, 65 47 C 62 43, 54 47, 50.5 55" strokeLinecap="round" />
                       
-                      <path d="M 40 64 C 33 60, 24 53, 21 47 C 19 44, 21 41, 25 43 C 29 45, 36 50, 42 57" strokeLinecap="round" />
-
-                      <path d="M 44.5 15.5 C 45 13.5, 46.5 13.5, 47 15.5 L 47 17.5" opacity="0.8" />
-                      <path d="M 51.5 9.5 C 52 7.5, 53.5 7.5, 54 9.5 L 54 11.5" opacity="0.8" />
-                      <path d="M 57.5 13.5 C 58 11.5, 59.5 11.5, 60 13.5 L 60 15.5" opacity="0.8" />
-                      <path d="M 62.5 23.5 C 63 21.5, 64 21.5, 64.5 23.5 L 64 25.5" opacity="0.8" />
+                      {/* Left Leaf 2 */}
+                      <path d="M 48 48 C 38 46, 30 38, 33 30 C 36 26, 44 30, 47.5 38" strokeLinecap="round" />
+                      {/* Right Leaf 2 */}
+                      <path d="M 47 43 C 57 41, 65 33, 62 25 C 59 21, 51 25, 47.5 33" strokeLinecap="round" />
+                      
+                      {/* Top leaf */}
+                      <path d="M 45 20 C 43 12, 47 5, 52 10 C 55 14, 51 18, 45 20" strokeLinecap="round" />
 
                       {/* Sparkles */}
-                      <path d="M 23 23 L 25 25 L 28 26 L 25 27 L 23 29 L 21 27 L 18 26 L 21 25 Z" fill="currentColor" opacity="0.8" stroke="none" />
-                      <path d="M 75 32 L 76 34 L 79 35 L 76 36 L 75 38 L 74 36 L 71 35 L 74 34 Z" fill="currentColor" opacity="0.8" stroke="none" />
-                      <path d="M 32 8 L 33 9.5 L 35 10 L 33 10.5 L 32 12 L 31 10.5 L 29 10 L 31 9.5 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                      <path d="M 23 28 L 25 30 L 28 31 L 25 32 L 23 34 L 21 32 L 18 31 L 21 30 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                      <path d="M 75 42 L 76 44 L 79 45 L 76 46 L 75 48 L 74 46 L 71 45 L 74 44 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                      <path d="M 32 10 L 33 11.5 L 35 12 L 33 12.5 L 32 14 L 31 12.5 L 29 12 L 31 11.5 Z" fill="currentColor" opacity="0.8" stroke="none" />
                     </svg>
                   )}
                 </div>
