@@ -64,6 +64,7 @@ export default function App() {
   
   const previewAreaRef = useRef(null);
   const exportRef = useRef(null);
+  const lastWindowSizeRef = useRef({ width: 0, height: 0 });
 
   // 初始化預設班表資料：所有日期均無時段（預設空檔，由用戶解析或批次套用）
   useEffect(() => {
@@ -166,7 +167,20 @@ export default function App() {
       const el = previewAreaRef.current;
       if (!el) return;
       
-      const isMobile = window.innerWidth <= 960;
+      const currentWidth = window.innerWidth;
+      const currentHeight = window.innerHeight;
+      
+      // 視窗大小無任何實質改變時直接返回，防止滾動條出現/消失等內部排版觸發無限 ResizeObserver 迴圈
+      if (
+        lastWindowSizeRef.current.width === currentWidth &&
+        lastWindowSizeRef.current.height === currentHeight
+      ) {
+        return;
+      }
+      
+      lastWindowSizeRef.current = { width: currentWidth, height: currentHeight };
+      
+      const isMobile = currentWidth <= 960;
       const parentWidth = el.clientWidth - (isMobile ? 32 : 40); // 左右 padding
       const parentHeight = el.clientHeight - 120; // 上下 標示與邊界
       

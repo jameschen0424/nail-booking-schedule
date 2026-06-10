@@ -478,8 +478,8 @@ export default function PreviewCanvas({
             border: `1px solid ${themeColors.border}`,
             borderRadius: '8px',
             padding: scale.calendarPadding,
-            display: 'flex',
-            flexDirection: 'column',
+            display: 'grid',
+            gridTemplateRows: 'auto 1fr',
             boxShadow: '0 6px 15px rgba(0,0,0,0.01)',
             minHeight: scale.calendarMinHeight
           }}>
@@ -520,7 +520,6 @@ export default function PreviewCanvas({
               display: 'grid',
               gridTemplateColumns: 'repeat(7, 1fr)',
               gridTemplateRows: `repeat(${Math.ceil(calendarCells.length / 7)}, 1fr)`,
-              flex: '1 1 auto',
               minHeight: 0,
               gap: isSquare ? '2px' : '4px'
             }}>
