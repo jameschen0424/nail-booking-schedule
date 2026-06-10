@@ -1,5 +1,7 @@
 import { useRef, useEffect } from 'react';
 import QRCodeGen from './Common/QRCodeGen';
+import defaultHeroImg from '../assets/hero.png';
+import pinkFloralBg from '../assets/pink_floral_bg.png';
 
 export default function PreviewCanvas({ 
   year, 
@@ -146,15 +148,18 @@ export default function PreviewCanvas({
     backgroundRepeat: 'no-repeat'
   } : {
     backgroundColor: themeColors.background,
-    backgroundImage: theme.id === 'sageGreen' 
+    backgroundImage: theme.id === 'pinkFloral'
+      ? `url(${pinkFloralBg})`
+      : theme.id === 'sageGreen' 
       ? 'radial-gradient(circle at 20% 20%, #F5F7F6 0%, #EAEFEF 100%)'
       : theme.id === 'beigeLuxury'
       ? 'linear-gradient(135deg, #FAF7F2 0%, #F4ECE1 100%)'
       : theme.id === 'turquoiseGold'
       ? 'radial-gradient(circle at 80% 80%, #F2F8F7 0%, #DCEBE9 100%)'
-      : theme.id === 'pinkFloral'
-      ? 'linear-gradient(180deg, #FDF7F8 0%, #FAF0F2 100%)'
-      : 'none'
+      : 'none',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat'
   };
 
   // 載入 Google Fonts
@@ -194,7 +199,7 @@ export default function PreviewCanvas({
       }}
     >
       {/* 1. 主題向量裝飾背景 */}
-      {!customBgUrl && (
+      {!customBgUrl && theme.id !== 'pinkFloral' && (
         <>
           <div 
             style={{ 
@@ -224,7 +229,7 @@ export default function PreviewCanvas({
       )}
 
       {/* 2. 海洋大理石與粉色櫻花的金色框線 */}
-      {!customBgUrl && (theme.id === 'turquoiseGold' || theme.id === 'pinkFloral') && (
+      {!customBgUrl && theme.id === 'turquoiseGold' && (
         <div style={{
           position: 'absolute',
           top: isStory ? '12px' : '8px',
@@ -387,22 +392,39 @@ export default function PreviewCanvas({
           height: '100%',
           boxSizing: 'border-box'
         }}>
-          {/* Header 區塊 - 左右精緻雜誌排版，高度大幅壓縮，留給下方日曆最大空間 */}
+          {/* Header 區塊 - 左右精緻排版，比照設計圖 */}
           <div style={{ 
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'flex-end',
+            alignItems: 'center',
             width: '100%',
             marginBottom: scale.headerMarginBottom,
             marginTop: scale.headerMarginTop,
-            borderBottom: `1px dashed ${themeColors.border}80`,
-            paddingBottom: isStory ? '8px' : '4px',
             boxSizing: 'border-box'
           }}>
-            {/* 左側：大月份與英月份/年份 */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: isStory ? '10px' : '6px' }}>
+            {/* 左側：年份與大月份、英月重疊排版 */}
+            <div style={{ 
+              position: 'relative', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'flex-start',
+              width: isStory ? '100px' : isPortrait ? '80px' : '70px',
+              height: isStory ? '90px' : isPortrait ? '70px' : '60px',
+              justifyContent: 'center'
+            }}>
               <span style={{ 
-                fontSize: scale.monthFontSize, 
+                fontSize: isStory ? '11px' : '9px', 
+                opacity: 0.6, 
+                letterSpacing: '1.5px',
+                color: themeColors.textPrimary,
+                fontFamily: selectedFont.titleFontFamily,
+                marginBottom: '-4px',
+                fontWeight: '600'
+              }}>
+                {year}
+              </span>
+              <span style={{ 
+                fontSize: isStory ? '64px' : isPortrait ? '48px' : '38px', 
                 fontWeight: '700', 
                 lineHeight: 0.9, 
                 color: themeColors.textPrimary,
@@ -410,110 +432,170 @@ export default function PreviewCanvas({
               }}>
                 {month.toString().padStart(2, '0')}
               </span>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1 }}>
-                <span style={{ 
-                  fontSize: scale.enMonthFontSize, 
-                  fontFamily: selectedFont.scriptFontFamily, 
-                  fontStyle: fontStyle === 'serif' || fontStyle === 'cursive' ? 'italic' : 'normal',
-                  color: themeColors.accent,
-                  marginBottom: '2px'
-                }}>
-                  {getEnglishMonthShort(month)}
-                </span>
-                <span style={{ fontSize: scale.yearFontSize, opacity: 0.6, letterSpacing: '1px' }}>{year}</span>
-              </div>
+              <span style={{ 
+                position: 'absolute',
+                left: isStory ? '24px' : isPortrait ? '18px' : '14px',
+                bottom: isStory ? '2px' : isPortrait ? '2px' : '1px',
+                fontSize: isStory ? '36px' : isPortrait ? '28px' : '22px', 
+                fontFamily: '"Great Vibes", "Dancing Script", cursive', 
+                color: theme.id === 'pinkFloral' ? themeColors.textSecondary : themeColors.accent,
+                lineHeight: 1,
+                textShadow: '1px 1px 0px rgba(255, 255, 255, 0.8)'
+              }}>
+                {getEnglishMonthShort(month)}
+              </span>
             </div>
 
-            {/* 右側：標題、美甲師名稱與副標題 */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right' }}>
-              {/* 預約空檔表 */}
+            {/* 中間：標題、美甲師名稱與副標題 */}
+            <div style={{ 
+              flex: 1, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              textAlign: 'center',
+              padding: '0 8px'
+            }}>
+              {/* 美甲預約表 */}
               <h1 style={{ 
-                fontSize: scale.mainTitleFontSize, 
+                fontSize: scale.monthFontSize === '60px' ? '28px' : scale.mainTitleFontSize, 
                 fontWeight: '700', 
                 margin: 0, 
-                letterSpacing: '2px',
+                letterSpacing: '3px',
                 color: themeColors.textPrimary,
-                lineHeight: 1.1
+                lineHeight: 1.1,
+                fontFamily: selectedFont.titleFontFamily
               }}>
                 {title}
               </h1>
 
-              {/* 美甲師名稱 */}
-              <div style={{ marginTop: isStory ? '5px' : '3px' }}>
-                <span style={{
-                  fontSize: scale.staffNameFontSize,
-                  fontWeight: 'bold',
-                  padding: scale.staffNamePadding,
-                  border: `1px solid ${themeColors.accent}`,
-                  borderRadius: '20px',
-                  color: themeColors.textPrimary,
-                  backgroundColor: themeColors.cardBg,
-                  letterSpacing: '1px',
-                  lineHeight: 1,
-                  display: 'inline-block'
+              {/* NAIL APPOINTMENT SCHEDULE */}
+              {titleEn && (
+                <div style={{ 
+                  fontSize: isStory ? '8px' : '7.5px', 
+                  letterSpacing: '1.5px', 
+                  opacity: 0.7, 
+                  textTransform: 'uppercase',
+                  color: themeColors.textSecondary,
+                  marginTop: '2px',
+                  marginBottom: '2px',
+                  fontWeight: '600'
                 }}>
-                  ✦ {staffName} 可預約時段 ✦
-                </span>
-              </div>
+                  {titleEn}
+                </div>
+              )}
 
               {/* 副標語 */}
               {subSlogan && (
                 <div style={{ 
                   fontSize: scale.subSloganFontSize, 
-                  opacity: 0.7, 
+                  opacity: 0.8, 
                   fontStyle: 'italic',
-                  marginTop: isStory ? '4px' : '2px',
-                  lineHeight: 1
+                  marginBottom: '6px',
+                  color: themeColors.textSecondary
                 }}>
                   {subSlogan}
                 </div>
               )}
+
+              {/* 美甲師名稱 pill tag */}
+              <div>
+                <span style={{
+                  fontSize: isStory ? '11px' : '9.5px',
+                  fontWeight: 'bold',
+                  padding: isStory ? '3px 14px' : '2px 10px',
+                  borderRadius: '20px',
+                  color: theme.id === 'pinkFloral' ? themeColors.textPrimary : '#FFFFFF',
+                  backgroundColor: theme.id === 'pinkFloral' ? '#FADCE1' : themeColors.headerBg,
+                  letterSpacing: '1px',
+                  lineHeight: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
+                }}>
+                  💗 {staffName}可預約時段 💗
+                </span>
+              </div>
             </div>
+
+            {/* 右側：Logo 或 美麗美甲作品照 */}
+            {!isSidebarLayout && (
+              <div style={{
+                width: isStory ? '75px' : isPortrait ? '60px' : '52px',
+                height: isStory ? '105px' : isPortrait ? '85px' : '75px',
+                borderRadius: '8px',
+                border: '2px solid #FFFFFF',
+                boxShadow: '0 6px 15px rgba(0,0,0,0.12)',
+                overflow: 'hidden',
+                transform: 'rotate(5deg)',
+                backgroundColor: '#FFFFFF',
+                flexShrink: 0
+              }}>
+                <img 
+                  src={logoImgUrl || defaultHeroImg} 
+                  alt="Nail Art" 
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover' 
+                  }} 
+                />
+              </div>
+            )}
           </div>
 
-          {/* Calendar Grid 區塊 */}
-          <div style={{
-            height: '100%',
-            minHeight: 0,
-            backgroundColor: themeColors.cardBg,
-            border: `1px solid ${themeColors.border}`,
-            borderRadius: '8px',
-            padding: scale.calendarPadding,
-            display: 'grid',
-            gridTemplateRows: 'auto 1fr',
-            boxShadow: '0 6px 15px rgba(0,0,0,0.01)'
-          }}>
-            {/* 星期 Header */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(7, 1fr)',
-              borderBottom: `1px solid ${themeColors.border}`,
-              paddingBottom: '4px',
-              marginBottom: '4px',
-              textAlign: 'center'
-            }}>
-              {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((w, idx) => {
-                const isWeekend = idx === 0 || idx === 6;
-                const weekCh = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'][idx];
-                return (
-                  <div key={w} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <span style={{ 
-                      fontSize: scale.calendarHeaderFontSize, 
-                      fontWeight: 'bold', 
-                      opacity: isWeekend ? 0.9 : 0.6,
-                      color: isWeekend ? '#D9534F' : themeColors.textPrimary
-                    }}>{w}</span>
-                    {!isSquare && (
-                      <span style={{ 
-                        fontSize: '8px', 
-                        opacity: isWeekend ? 0.9 : 0.6,
-                        color: isWeekend ? '#D9534F' : themeColors.textPrimary
-                      }}>{weekCh}</span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+              {/* Calendar Grid 區塊 */}
+              <div style={{
+                height: '100%',
+                minHeight: 0,
+                backgroundColor: themeColors.cardBg,
+                border: `1px solid ${themeColors.border}90`,
+                borderRadius: '10px',
+                padding: scale.calendarPadding,
+                display: 'grid',
+                gridTemplateRows: 'auto 1fr',
+                boxShadow: '0 8px 25px rgba(0,0,0,0.02)'
+              }}>
+                {/* 星期 Header */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(7, 1fr)',
+                  backgroundColor: themeColors.headerBg,
+                  color: '#FFFFFF',
+                  borderRadius: '6px',
+                  padding: '4px 0',
+                  marginBottom: isStory ? '8px' : '4px',
+                  textAlign: 'center',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+                }}>
+                  {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((w, idx) => {
+                    const weekCh = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'][idx];
+                    return (
+                      <div key={w} style={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center', 
+                        color: '#FFFFFF',
+                        borderRight: idx < 6 ? '1px solid rgba(255,255,255,0.3)' : 'none'
+                      }}>
+                        <span style={{ 
+                          fontSize: scale.calendarHeaderFontSize, 
+                          fontWeight: '700', 
+                          color: '#FFFFFF',
+                          lineHeight: 1.1
+                        }}>{w}</span>
+                        {!isSquare && (
+                          <span style={{ 
+                            fontSize: '7.5px', 
+                            opacity: 0.95,
+                            color: '#FFFFFF',
+                            lineHeight: 1
+                          }}>{weekCh}</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
 
             {/* 日曆網格格子 */}
             <div style={{
@@ -522,7 +604,8 @@ export default function PreviewCanvas({
               gridTemplateRows: `repeat(${Math.ceil(calendarCells.length / 7)}, 1fr)`,
               minHeight: 0,
               height: '100%',
-              gap: isSquare ? '2px' : '4px'
+              gap: '1px',
+              backgroundColor: theme.id === 'pinkFloral' ? '#FADCE1' : `${themeColors.border}a0`
             }}>
               {calendarCells.map((cell, index) => {
                 if (cell.empty) {
@@ -540,248 +623,253 @@ export default function PreviewCanvas({
                 const hasMoreSlots = cell.slots.length > maxVisibleSlots;
 
                 return (
-                  <div 
-                    key={`day-${cell.day}`} 
-                    style={{
-                      border: `0.5px solid ${themeColors.border}`,
-                      borderRadius: '4px',
-                      padding: scale.cellPadding,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'flex-start',
-                      alignItems: 'stretch',
-                      backgroundColor: isTodayOff ? 'transparent' : 'rgba(255,255,255,0.4)',
-                      opacity: isTodayOff ? 0.8 : 1,
-                      boxSizing: 'border-box',
-                      overflow: 'hidden'
-                    }}
-                  >
-                    {/* 日期標題 */}
-                    <div style={{
-                      fontSize: scale.dayFontSize,
-                      fontWeight: '700',
-                      marginBottom: '1px',
-                      paddingLeft: '2px',
-                      color: isWeekend ? '#D9534F' : themeColors.textPrimary,
-                    }}>
-                      {cell.day}
-                    </div>
+                    <div 
+                      key={`day-${cell.day}`} 
+                      style={{
+                        padding: scale.cellPadding,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        alignItems: 'stretch',
+                        backgroundColor: isTodayOff 
+                          ? (theme.id === 'pinkFloral' ? 'rgba(255,255,255,0.1)' : 'transparent')
+                          : 'rgba(255,255,255,0.9)',
+                        opacity: isTodayOff ? 0.85 : 1,
+                        boxSizing: 'border-box',
+                        overflow: 'hidden',
+                        transition: 'background-color 0.2s'
+                      }}
+                    >
+                      {/* 日期標題 */}
+                      <div style={{
+                        fontSize: scale.dayFontSize,
+                        fontWeight: '700',
+                        marginBottom: '2px',
+                        paddingLeft: '2px',
+                        color: themeColors.textPrimary,
+                        fontFamily: selectedFont.fontFamily
+                      }}>
+                        {cell.day}
+                      </div>
 
-                    {/* 日期時段或休假 */}
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      flexGrow: 1,
-                      justifyContent: isTodayOff ? 'center' : 'flex-start',
-                      alignItems: 'center',
-                      width: '100%',
-                      boxSizing: 'border-box'
-                    }}>
-                      {isTodayOff ? (
-                        <div style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: themeColors.textSecondary,
-                          fontSize: isSquare ? '7px' : '8px',
-                          fontWeight: 'bold',
-                          gap: '1px',
-                          opacity: 0.8,
-                          height: '100%'
-                        }}>
-                          <div 
-                            style={{ width: isSquare ? '10px' : '12px', height: isSquare ? '10px' : '12px' }}
-                            dangerouslySetInnerHTML={{ __html: theme.decorations.leafIcon }}
-                          />
-                          <span>休假</span>
-                        </div>
-                      ) : useTwoColumns ? (
-                        <div style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(2, 1fr)',
-                          gap: isSquare ? '1px' : '1.5px',
-                          width: '100%',
-                          boxSizing: 'border-box'
-                        }}>
-                          {displayedSlots.map((slot, sIdx) => {
-                            const slotFontSize = `calc(${scale.slotFontSize} * 0.9)`;
-                            const dynamicFontSize = getSlotFontSize(slot, slotFontSize);
-                            const slotPadding = isSquare ? '1px 1px' : '1px 1.5px';
-                            return (
-                              <div 
-                                key={sIdx} 
-                                style={{
-                                  fontSize: dynamicFontSize,
-                                  lineHeight: '1.1',
-                                  padding: slotPadding,
-                                  borderRadius: '2px',
-                                  backgroundColor: themeColors.slotBg,
-                                  color: themeColors.slotText,
-                                  width: '100%',
-                                  textAlign: 'center',
-                                  boxSizing: 'border-box',
-                                  fontWeight: '600',
-                                  border: `1px solid ${themeColors.textPrimary}2e`,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap'
-                                }}
-                              >
-                                {slot}
+                      {/* 日期時段或休假 */}
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flexGrow: 1,
+                        justifyContent: isTodayOff ? 'center' : 'flex-start',
+                        alignItems: 'center',
+                        width: '100%',
+                        boxSizing: 'border-box'
+                      }}>
+                        {isTodayOff ? (
+                          <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: themeColors.textSecondary,
+                            fontSize: isStory ? '10.5px' : isPortrait ? '9px' : '8px',
+                            fontWeight: 'bold',
+                            opacity: 0.7,
+                            height: '100%',
+                            fontFamily: selectedFont.fontFamily
+                          }}>
+                            休假
+                          </div>
+                        ) : useTwoColumns ? (
+                          <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                            gap: isSquare ? '1px' : '1.5px',
+                             width: '100%',
+                            boxSizing: 'border-box'
+                          }}>
+                            {displayedSlots.map((slot, sIdx) => {
+                              const slotFontSize = `calc(${scale.slotFontSize} * 0.9)`;
+                              const dynamicFontSize = getSlotFontSize(slot, slotFontSize);
+                              const slotPadding = isSquare ? '1px 1px' : '1px 1.5px';
+                              return (
+                                <div 
+                                  key={sIdx} 
+                                  style={{
+                                    fontSize: dynamicFontSize,
+                                    lineHeight: '1.15',
+                                    padding: slotPadding,
+                                    borderRadius: '4px',
+                                    backgroundColor: themeColors.slotBg,
+                                    color: themeColors.slotText,
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    boxSizing: 'border-box',
+                                    fontWeight: '600',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap'
+                                  }}
+                                >
+                                  {slot}
+                                </div>
+                              );
+                            })}
+                            {hasMoreSlots && (
+                              <div style={{ 
+                                gridColumn: 'span 2', 
+                                fontSize: '7px', 
+                                opacity: 0.5, 
+                                textAlign: 'center', 
+                                lineHeight: 1,
+                                marginTop: '1px'
+                              }}>
+                                •••
                               </div>
-                            );
-                          })}
-                          {hasMoreSlots && (
-                            <div style={{ 
-                              gridColumn: 'span 2', 
-                              fontSize: '7px', 
-                              opacity: 0.5, 
-                              textAlign: 'center', 
-                              lineHeight: 1,
-                              marginTop: '1px'
-                            }}>
-                              •••
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '1.5px',
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          alignItems: 'center'
-                        }}>
-                          {displayedSlots.map((slot, sIdx) => {
-                            const dynamicFontSize = getSlotFontSize(slot, scale.slotFontSize);
-                            return (
-                              <div 
-                                key={sIdx} 
-                                style={{
-                                  fontSize: dynamicFontSize,
-                                  lineHeight: '1.2',
-                                  padding: scale.slotPadding,
-                                  borderRadius: '2px',
-                                  backgroundColor: themeColors.slotBg,
-                                  color: themeColors.slotText,
-                                  width: '100%',
-                                  textAlign: 'center',
-                                  boxSizing: 'border-box',
-                                  fontWeight: '600',
-                                  border: `1px solid ${themeColors.textPrimary}2e`,
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                  display: 'block'
-                                }}
-                              >
-                                {slot}
+                            )}
+                          </div>
+                        ) : (
+                          <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '2px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            alignItems: 'center'
+                          }}>
+                            {displayedSlots.map((slot, sIdx) => {
+                              const dynamicFontSize = getSlotFontSize(slot, scale.slotFontSize);
+                              return (
+                                <div 
+                                  key={sIdx} 
+                                  style={{
+                                    fontSize: dynamicFontSize,
+                                    lineHeight: '1.2',
+                                    padding: scale.slotPadding,
+                                    borderRadius: '4px',
+                                    backgroundColor: themeColors.slotBg,
+                                    color: themeColors.slotText,
+                                    width: '100%',
+                                    textAlign: 'center',
+                                    boxSizing: 'border-box',
+                                    fontWeight: '600',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    display: 'block'
+                                  }}
+                                >
+                                  {slot}
+                                </div>
+                              );
+                            })}
+                            {hasMoreSlots && (
+                              <div style={{ fontSize: '7px', opacity: 0.5, textAlign: 'center', lineHeight: 1 }}>
+                                •••
                               </div>
-                            );
-                          })}
-                          {hasMoreSlots && (
-                            <div style={{ fontSize: '7px', opacity: 0.5, textAlign: 'center', lineHeight: 1 }}>
-                              •••
-                            </div>
-                          )}
-                        </div>
-                      )}
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
                 );
               })}
             </div>
           </div>
 
-          {/* ================= C. 水平排版時的底部資訊欄 (對稱設計，Logo 保證置中) ================= */}
+          {/* ================= C. 水平排版時的底部資訊欄 (對稱設計，無邊框卡片，比照設計圖) ================= */}
           {!isSidebarLayout && (
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'stretch',
-              marginTop: isStory ? '12px' : isPortrait ? '8px' : '6px',
-              gap: isStory ? '12px' : '6px',
+              marginTop: isStory ? '14px' : isPortrait ? '10px' : '8px',
+              gap: isStory ? '16px' : '10px',
               height: scale.footerHeight,
               boxSizing: 'border-box',
-              width: '100%'
+              width: '100%',
+              padding: '0 4px'
             }}>
-              {/* 左側：預約須知卡片 (flex: 1) */}
+              {/* 左側：預約須知 */}
               <div style={{
                 flex: '1 1 0px',
                 minWidth: 0,
-                border: `1px solid ${themeColors.border}`,
-                backgroundColor: themeColors.cardBg,
-                padding: isStory ? '8px 12px' : '6px 8px',
-                borderRadius: '8px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
                 overflow: 'hidden'
               }}>
-                <h4 style={{ 
-                  fontSize: isStory ? '10.5px' : '9.5px', 
-                  margin: '0 0 4px 0', 
-                  fontWeight: 'bold',
-                  letterSpacing: '1px',
-                  borderBottom: `1px solid ${themeColors.border}`,
-                  paddingBottom: '2px'
-                }}>
-                  ✦ 預約須知 ✦
-                </h4>
-                <ul style={{ 
-                  margin: 0, 
-                  padding: '0 4px 0 10px', 
-                  fontSize: scale.footerNotesFontSize, 
-                  lineHeight: scale.footerNotesLineHeight,
-                  opacity: 0.9,
-                  listStyleType: 'disc',
+                {/* 預約須知 pill header */}
+                <div style={{ marginBottom: '6px' }}>
+                  <span style={{
+                    fontSize: isStory ? '10px' : '8.5px',
+                    fontWeight: 'bold',
+                    padding: isStory ? '3px 12px' : '2px 8px',
+                    borderRadius: '20px',
+                    color: '#FFFFFF',
+                    backgroundColor: themeColors.headerBg,
+                    letterSpacing: '1px',
+                    lineHeight: 1,
+                    display: 'inline-block'
+                  }}>
+                    預約須知
+                  </span>
+                </div>
+                <div style={{
+                  border: `1.5px solid ${themeColors.border}`,
+                  borderRadius: '8px',
+                  padding: isStory ? '8px 10px' : '6px 8px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.45)',
+                  marginTop: '4px',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.01)',
+                  flexGrow: 1,
                   overflow: 'hidden'
                 }}>
-                  {notesList.slice(0, isSquare ? 2 : 3).map((item, idx) => (
-                    <li key={idx} style={{ 
-                      marginBottom: '2px', 
-                      overflow: 'hidden', 
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      lineHeight: 1.2
-                    }}>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                  <ul style={{ 
+                    margin: 0, 
+                    padding: '0 4px 0 12px', 
+                    fontSize: scale.footerNotesFontSize, 
+                    lineHeight: scale.footerNotesLineHeight,
+                    opacity: 0.9,
+                    listStyleType: 'disc',
+                    color: themeColors.textPrimary
+                  }}>
+                    {notesList.slice(0, isSquare ? 2 : 3).map((item, idx) => (
+                      <li key={idx} style={{ 
+                        marginBottom: '2.5px', 
+                        overflow: 'hidden', 
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        lineHeight: 1.25
+                      }}>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
-              {/* 中間：品牌商標 Logo (固定寬度，完美置中) */}
+              {/* 中間：品牌商標 Logo (固定寬度，完美置中，無邊框) */}
               <div style={{
-                flex: isStory ? '0 0 145px' : isPortrait ? '0 0 120px' : '0 0 100px',
-                border: `1px solid ${themeColors.border}`,
-                backgroundColor: themeColors.cardBg,
-                borderRadius: '8px',
+                flex: isStory ? '0 0 150px' : isPortrait ? '0 0 125px' : '0 0 105px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '4px 6px',
+                padding: '2px 4px',
                 textAlign: 'center',
-                boxShadow: '0 4px 10px rgba(0,0,0,0.01)',
                 overflow: 'hidden'
               }}>
                 <div style={{ 
                   width: hideBrandText 
-                    ? '90%' 
-                    : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.5)` : scale.footerLogoIconSize), 
+                    ? '80%' 
+                    : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.6)` : `calc(${scale.footerLogoIconSize} * 2.2)`), 
                   height: hideBrandText 
                     ? '80%' 
-                    : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.5)` : scale.footerLogoIconSize), 
-                  color: themeColors.accent, 
-                  marginBottom: hideBrandText ? '0px' : '2px',
+                    : (logoImgUrl ? `calc(${scale.footerLogoIconSize} * 1.6)` : `calc(${scale.footerLogoIconSize} * 2.2)`), 
+                  color: themeColors.textSecondary, 
+                  marginBottom: hideBrandText ? '0px' : '4px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -789,19 +877,42 @@ export default function PreviewCanvas({
                   {logoImgUrl ? (
                     <img src={logoImgUrl} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
                   ) : (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-                      <path d="M12 2C8 6 4 10 4 15a8 8 0 0 0 16 0c0-5-4-9-8-13Z" />
+                    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.1" style={{ width: '100%', height: '100%' }}>
+                      {/* Wrist/arm line */}
+                      <path d="M 40 90 C 42 80, 45 72, 47 62 C 48 57, 46 54, 43 51" strokeLinecap="round" />
+                      <path d="M 52 90 C 53 82, 54 75, 55 65" strokeLinecap="round" />
+                      
+                      {/* Slender fingers curved gracefully */}
+                      <path d="M 43 51 C 41 42, 38 27, 43 14 C 44 11, 47 11, 48 18 C 49 25, 47 42, 47 48" strokeLinecap="round" />
+                      <path d="M 47 48 C 47 38, 46 20, 50 8 C 51 5, 54 5, 55 14 C 56 23, 54 42, 53 48" strokeLinecap="round" />
+                      <path d="M 53 48 C 53 39, 53 23, 56 12 C 57 9, 60 9, 60 18 C 60 27, 58 43, 57 49" strokeLinecap="round" />
+                      <path d="M 57 49 C 57 42, 59 30, 61 22 C 62 19, 65 19, 65 27 C 65 35, 62 48, 60 56" strokeLinecap="round" />
+                      <path d="M 60 56 C 59 62, 56 65, 55 65" strokeLinecap="round" />
+                      
+                      <path d="M 40 64 C 33 60, 24 53, 21 47 C 19 44, 21 41, 25 43 C 29 45, 36 50, 42 57" strokeLinecap="round" />
+
+                      <path d="M 44.5 15.5 C 45 13.5, 46.5 13.5, 47 15.5 L 47 17.5" opacity="0.8" />
+                      <path d="M 51.5 9.5 C 52 7.5, 53.5 7.5, 54 9.5 L 54 11.5" opacity="0.8" />
+                      <path d="M 57.5 13.5 C 58 11.5, 59.5 11.5, 60 13.5 L 60 15.5" opacity="0.8" />
+                      <path d="M 62.5 23.5 C 63 21.5, 64 21.5, 64.5 23.5 L 64 25.5" opacity="0.8" />
+
+                      {/* Sparkles */}
+                      <path d="M 23 23 L 25 25 L 28 26 L 25 27 L 23 29 L 21 27 L 18 26 L 21 25 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                      <path d="M 75 32 L 76 34 L 79 35 L 76 36 L 75 38 L 74 36 L 71 35 L 74 34 Z" fill="currentColor" opacity="0.8" stroke="none" />
+                      <path d="M 32 8 L 33 9.5 L 35 10 L 33 10.5 L 32 12 L 31 10.5 L 29 10 L 31 9.5 Z" fill="currentColor" opacity="0.8" stroke="none" />
                     </svg>
                   )}
                 </div>
                 {!hideBrandText && (
                   <>
                     <h3 style={{ 
-                      fontSize: scale.footerLogoFontSize, 
-                      fontWeight: 'bold', 
+                      fontSize: theme.id === 'pinkFloral' ? `calc(${scale.footerLogoFontSize} * 1.5)` : scale.footerLogoFontSize, 
+                      fontWeight: theme.id === 'pinkFloral' ? 'normal' : 'bold', 
                       margin: '0 0 2px 0', 
                       letterSpacing: '1px',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      color: themeColors.textPrimary,
+                      fontFamily: theme.id === 'pinkFloral' ? '"Great Vibes", "Dancing Script", cursive' : selectedFont.titleFontFamily
                     }}>
                       {brandName}
                     </h3>
@@ -810,7 +921,8 @@ export default function PreviewCanvas({
                       margin: 0, 
                       opacity: 0.8, 
                       fontStyle: 'italic',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      color: themeColors.textSecondary
                     }}>
                       {slogan}
                     </p>
@@ -818,50 +930,75 @@ export default function PreviewCanvas({
                 )}
               </div>
 
-              {/* 右側：QR Code 區塊 (flex: 1，與左側寬度完全一致) */}
+              {/* 右側：QR Code 區塊 */}
               <div style={{
                 flex: '1 1 0px',
                 minWidth: 0,
-                border: `1px solid ${themeColors.border}`,
-                backgroundColor: themeColors.cardBg,
-                borderRadius: '8px',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: isStory ? '6px 12px' : '4px 8px',
-                gap: isStory ? '8px' : '4px'
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                overflow: 'hidden'
               }}>
-                <QRCodeGen url={qrUrl} color={themeColors.textPrimary} size={scale.qrSize} />
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justifyContent: 'center',
-                  minWidth: 0,
-                  flex: '1 1 0px' // 讓文字區域伸展，佔滿剩餘空間
-                }}>
-                  <span style={{ 
-                    fontSize: scale.qrLabelFontSize, 
-                    fontWeight: 'bold', 
-                    color: themeColors.textPrimary, 
-                    marginBottom: '1px',
-                    whiteSpace: 'nowrap'
+                {/* 立即預約 pill header */}
+                <div style={{ marginBottom: '6px' }}>
+                  <span style={{
+                    fontSize: isStory ? '10px' : '8.5px',
+                    fontWeight: 'bold',
+                    padding: isStory ? '3px 12px' : '2px 8px',
+                    borderRadius: '20px',
+                    color: '#FFFFFF',
+                    backgroundColor: themeColors.headerBg,
+                    letterSpacing: '1px',
+                    lineHeight: 1,
+                    display: 'inline-block'
                   }}>
-                    立即預約
+                    立即預約 ⇦
                   </span>
-                  <p style={{ 
-                    fontSize: scale.qrDescFontSize, 
-                    margin: 0, 
-                    opacity: 0.8, 
-                    lineHeight: 1.2,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    wordBreak: 'break-all'
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: isStory ? '8px' : '4px',
+                  width: '100%',
+                  justifyContent: 'flex-end'
+                }}>
+                  <div style={{
+                    border: `1px solid ${themeColors.border}`,
+                    padding: '2px',
+                    borderRadius: '6px',
+                    backgroundColor: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
                   }}>
-                    {qrText.replace(/\n/g, ' ')}
-                  </p>
+                    <QRCodeGen url={qrUrl} color={themeColors.textPrimary} size={scale.qrSize} />
+                  </div>
+                  <div style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justifyContent: 'center',
+                    minWidth: 0,
+                    textAlign: 'left'
+                  }}>
+                    <p style={{ 
+                      fontSize: scale.qrDescFontSize, 
+                      margin: 0, 
+                      opacity: 0.9, 
+                      lineHeight: 1.25,
+                      fontWeight: '500',
+                      color: themeColors.textPrimary,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      wordBreak: 'break-all',
+                      whiteSpace: 'pre-line'
+                    }}>
+                      {qrText}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

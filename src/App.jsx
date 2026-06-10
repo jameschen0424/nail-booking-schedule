@@ -26,21 +26,21 @@ export default function App() {
   const [layout, setLayout] = useState(() => getLocalStorageValue('salon_layout', 'sidebar'));
   const [aspectRatio, setAspectRatio] = useState(() => getLocalStorageValue('salon_aspectRatio', 'story'));
   const [fontStyle, setFontStyle] = useState(() => getLocalStorageValue('salon_fontStyle', 'serif'));
-  const [title, setTitle] = useState(() => getLocalStorageValue('salon_title', '預約空檔表'));
-  const [titleEn, setTitleEn] = useState(() => getLocalStorageValue('salon_titleEn', 'Appointment Schedule'));
+  const [title, setTitle] = useState(() => getLocalStorageValue('salon_title', '美甲預約表'));
+  const [titleEn, setTitleEn] = useState(() => getLocalStorageValue('salon_titleEn', 'NAIL APPOINTMENT SCHEDULE'));
   const [brandName, setBrandName] = useState(() => {
-    const val = getLocalStorageValue('salon_brandName', 'Yunnie nail');
-    return val === 'Yunnie Salon' ? 'Yunnie nail' : val;
+    const val = getLocalStorageValue('salon_brandName', 'Yunnie Nail');
+    return (val === 'Yunnie Salon' || val === 'Yunnie nail') ? 'Yunnie Nail' : val;
   });
   const [slogan, setSlogan] = useState(() => getLocalStorageValue('salon_slogan', '用心成就你的美 ♡'));
   const [staffName, setStaffName] = useState(() => getLocalStorageValue('salon_staffName', 'Yunnie'));
-  const [subSlogan, setSubSlogan] = useState(() => getLocalStorageValue('salon_subSlogan', '— 專屬您的美麗時光 —'));
-  const [notes, setNotes] = useState(() => getLocalStorageValue('salon_notes', '請提前預約，確保時段為您保留\n如需更改時間，請於三天前告知\n遲到將視情況縮短或調整服務內容\n超過 20 分鐘將自動取消預約'));
+  const [subSlogan, setSubSlogan] = useState(() => getLocalStorageValue('salon_subSlogan', '— 美麗，從指尖開始 —'));
+  const [notes, setNotes] = useState(() => getLocalStorageValue('salon_notes', '請提前預約，確保時段為您保留\n如需更改時間，請三天前告知\n遲到超過15分鐘改做單色，超過20分鐘自動取消預約'));
   const [qrUrl, setQrUrl] = useState(() => {
     const val = getLocalStorageValue('salon_qrUrl', 'https://lin.ee/RIkbQrKR');
     return val === 'https://line.me/R/ti/p/@yunnie_nail' ? 'https://lin.ee/RIkbQrKR' : val;
   });
-  const [qrText, setQrText] = useState(() => getLocalStorageValue('salon_qrText', '掃描 QR Code\n私訊預約更方便！'));
+  const [qrText, setQrText] = useState(() => getLocalStorageValue('salon_qrText', '掃描 QR Code\n私訊預約\n更方便！ ♡'));
   const [customBgUrl, setCustomBgUrl] = useState(() => getLocalStorageValue('salon_customBgUrl', ''));
   const [logoImgUrl, setLogoImgUrl] = useState(() => getLocalStorageValue('salon_logoImgUrl', ''));
   const [hideBrandText, setHideBrandText] = useState(() => getLocalStorageValue('salon_hideBrandText', false));
