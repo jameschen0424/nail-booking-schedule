@@ -23,10 +23,8 @@ export default function App() {
     const savedThemeId = getLocalStorageValue('salon_theme_id', 'sageGreen');
     return THEMES[savedThemeId] || THEMES.sageGreen;
   });
-  const [layout, setLayout] = useState(() => {
-    const val = getLocalStorageValue('salon_layout', 'footer');
-    return val === 'sidebar' ? 'footer' : val;
-  });
+  const [layout, setLayout] = useState(() => getLocalStorageValue('salon_layout', 'sidebar'));
+  const [heroImgUrl, setHeroImgUrl] = useState(() => getLocalStorageValue('salon_heroImgUrl', ''));
   const [aspectRatio, setAspectRatio] = useState(() => getLocalStorageValue('salon_aspectRatio', 'story'));
   const [fontStyle, setFontStyle] = useState(() => getLocalStorageValue('salon_fontStyle', 'serif'));
   const [title, setTitle] = useState(() => getLocalStorageValue('salon_title', '美甲預約表'));
@@ -173,6 +171,18 @@ export default function App() {
       console.warn('Failed to save custom background base64 image:', e);
     }
   }, [customBgUrl]);
+
+  useEffect(() => {
+    try {
+      if (heroImgUrl) {
+        window.localStorage.setItem('salon_heroImgUrl', JSON.stringify(heroImgUrl));
+      } else {
+        window.localStorage.removeItem('salon_heroImgUrl');
+      }
+    } catch (e) {
+      console.warn('Failed to save hero base64 image:', e);
+    }
+  }, [heroImgUrl]);
 
   // 動態計算縮放比例以適應視窗大小
   useEffect(() => {
@@ -336,6 +346,7 @@ export default function App() {
           scheduleData={scheduleData} setScheduleData={setScheduleData}
           customBgUrl={customBgUrl} setCustomBgUrl={setCustomBgUrl}
           logoImgUrl={logoImgUrl} setLogoImgUrl={setLogoImgUrl}
+          heroImgUrl={heroImgUrl} setHeroImgUrl={setHeroImgUrl}
           hideBrandText={hideBrandText} setHideBrandText={setHideBrandText}
           calendarHeight={calendarHeight} setCalendarHeight={setCalendarHeight}
           onExportPng={handleExport}
@@ -385,6 +396,7 @@ export default function App() {
             scheduleData={scheduleData}
             customBgUrl={customBgUrl}
             logoImgUrl={logoImgUrl}
+            heroImgUrl={heroImgUrl}
             hideBrandText={hideBrandText}
             calendarHeight={calendarHeight}
             exportRef={exportRef}

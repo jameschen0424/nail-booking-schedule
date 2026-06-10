@@ -2,6 +2,9 @@ import { useRef, useEffect } from 'react';
 import QRCodeGen from './Common/QRCodeGen';
 import defaultHeroImg from '../assets/hero.png';
 import pinkFloralBg from '../assets/pink_floral_bg.png';
+import heroGreen from '../assets/hero_green.png';
+import heroBeige from '../assets/hero_beige.png';
+import heroPink from '../assets/hero_pink.png';
 
 export default function PreviewCanvas({ 
   year, 
@@ -23,6 +26,7 @@ export default function PreviewCanvas({
   customBgUrl, 
   logoImgUrl,
   hideBrandText,
+  heroImgUrl,
   calendarHeight,
   exportRef 
 }) {
@@ -139,7 +143,14 @@ export default function PreviewCanvas({
 
   const themeColors = theme.colors;
 
-  const isSidebarLayout = false;
+  const isSidebarLayout = layout === 'sidebar';
+
+  const getDefaultHeroImage = () => {
+    if (theme.id === 'pinkFloral') return heroPink;
+    if (theme.id === 'beigeLuxury') return heroBeige;
+    return heroGreen;
+  };
+  const activeHeroImg = heroImgUrl || getDefaultHeroImage();
 
   // 背景圖風格
   const backgroundStyle = customBgUrl ? {
@@ -255,8 +266,201 @@ export default function PreviewCanvas({
         position: 'relative',
         zIndex: 2
       }}>
-        
+        {/* ================= A. 側欄排版時的左側資訊欄 ================= */}
+        {isSidebarLayout && (
+          <div style={{
+            width: isStory ? '135px' : isPortrait ? '125px' : '115px',
+            marginRight: isStory ? '16px' : '10px',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            boxSizing: 'border-box',
+            flexShrink: 0
+          }}>
+            <div style={{
+              border: `1.5px solid ${themeColors.border}`,
+              backgroundColor: themeColors.cardBg,
+              padding: isStory ? '16px 12px' : '10px 8px',
+              borderRadius: '30px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: '100%',
+              boxShadow: '0 8px 25px rgba(108, 83, 63, 0.03)',
+              overflow: 'hidden',
+              boxSizing: 'border-box'
+            }}>
+              {/* 1. 頂部裝飾 */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ 
+                  width: isStory ? '36px' : '28px', 
+                  height: isStory ? '36px' : '28px', 
+                  color: themeColors.accent, 
+                  marginBottom: '2px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <div dangerouslySetInnerHTML={{ __html: theme.decorations.leafIcon || '' }} style={{ width: '100%', height: '100%' }} />
+                </div>
+                
+                {/* 預約時段說明 */}
+                <span style={{ 
+                  fontSize: isStory ? '9.5px' : '8px', 
+                  fontWeight: '700', 
+                  color: themeColors.textPrimary,
+                  letterSpacing: '1px',
+                  marginBottom: '6px'
+                }}>
+                  ✦ 預約時段說明 ✦
+                </span>
+                
+                {/* 時段 capsules */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', width: '100%', alignItems: 'center' }}>
+                  {['11:00', '14:00', '17:00後'].map((slot, idx) => (
+                    <div key={idx} style={{
+                      fontSize: isStory ? '9.5px' : '8px',
+                      fontWeight: '600',
+                      padding: isStory ? '3px 14px' : '2px 10px',
+                      borderRadius: '20px',
+                      backgroundColor: themeColors.slotBg,
+                      color: themeColors.slotText,
+                      width: '85%',
+                      textAlign: 'center',
+                      boxSizing: 'border-box'
+                    }}>
+                      {slot}
+                    </div>
+                  ))}
+                </div>
+              </div>
 
+              {/* 分隔線 1 */}
+              <div style={{ height: '1px', backgroundColor: `${themeColors.border}B0`, margin: isStory ? '8px 0' : '4px 0', width: '100%' }} />
+
+              {/* 2. 預約須知 */}
+              <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
+                <span style={{ 
+                  fontSize: isStory ? '9.5px' : '8px', 
+                  fontWeight: '700', 
+                  color: themeColors.textPrimary,
+                  letterSpacing: '1px',
+                  marginBottom: '4px'
+                }}>
+                  ✦ 預約須知 ✦
+                </span>
+                <ul style={{ 
+                  margin: 0, 
+                  padding: '0 4px 0 12px', 
+                  fontSize: isStory ? '9px' : '7.5px', 
+                  lineHeight: 1.35,
+                  opacity: 0.9,
+                  listStyleType: 'disc',
+                  textAlign: 'left',
+                  color: themeColors.textPrimary,
+                  overflow: 'hidden'
+                }}>
+                  {notesList.slice(0, 3).map((item, idx) => (
+                    <li key={idx} style={{ marginBottom: '2.5px', lineHeight: 1.25 }}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 分隔線 2 */}
+              <div style={{ height: '1px', backgroundColor: `${themeColors.border}B0`, margin: isStory ? '8px 0' : '4px 0', width: '100%' }} />
+
+              {/* 3. 品牌品牌名 & logo */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ 
+                  width: logoImgUrl ? (isStory ? '40px' : '30px') : (isStory ? '32px' : '24px'), 
+                  height: logoImgUrl ? (isStory ? '40px' : '30px') : (isStory ? '32px' : '24px'), 
+                  color: themeColors.accent, 
+                  marginBottom: hideBrandText ? '0' : '4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  {logoImgUrl ? (
+                    <img src={logoImgUrl} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                  ) : (
+                    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.1" style={{ width: '100%', height: '100%' }}>
+                      <path d="M 50 90 C 50 70, 52 50, 45 20" strokeLinecap="round" />
+                      <path d="M 49 70 C 40 68, 32 60, 35 52 C 38 48, 46 52, 49.5 60" strokeLinecap="round" />
+                      <path d="M 50 65 C 60 63, 68 55, 65 47 C 62 43, 54 47, 50.5 55" strokeLinecap="round" />
+                    </svg>
+                  )}
+                </div>
+                {!hideBrandText && (
+                  <>
+                    <h3 style={{ 
+                      fontSize: isStory ? '14px' : '11px', 
+                      fontWeight: 'bold', 
+                      margin: '0 0 2px 0', 
+                      letterSpacing: '1px',
+                      color: themeColors.textPrimary,
+                      fontFamily: selectedFont.titleFontFamily
+                    }}>
+                      {brandName}
+                    </h3>
+                    <p style={{ 
+                      fontSize: isStory ? '8.5px' : '7px', 
+                      margin: 0, 
+                      opacity: 0.8, 
+                      fontStyle: 'italic',
+                      color: themeColors.textSecondary,
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {slogan}
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* 分隔線 3 */}
+              <div style={{ height: '1px', backgroundColor: `${themeColors.border}B0`, margin: isStory ? '8px 0' : '4px 0', width: '100%' }} />
+
+              {/* 4. QR Code */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <span style={{ 
+                  fontSize: isStory ? '9px' : '7.5px', 
+                  fontWeight: 'bold', 
+                  marginBottom: '4px', 
+                  color: themeColors.textPrimary,
+                  padding: '2px 8px',
+                  borderRadius: '10px',
+                  backgroundColor: themeColors.border,
+                  lineHeight: 1
+                }}>
+                  立即預約 ⇦
+                </span>
+                <div style={{
+                  border: `1px solid ${themeColors.border}`,
+                  padding: '2px',
+                  borderRadius: '8px',
+                  backgroundColor: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.03)'
+                }}>
+                  <QRCodeGen url={qrUrl} color={themeColors.textPrimary} size={isStory ? 56 : 45} />
+                </div>
+                <p style={{ 
+                  fontSize: isStory ? '7px' : '6px', 
+                  margin: '4px 0 0 0', 
+                  opacity: 0.8, 
+                  lineHeight: 1.2,
+                  color: themeColors.textSecondary,
+                  whiteSpace: 'pre-line',
+                  textAlign: 'center'
+                }}>
+                  {qrText.replace(/\n/g, ' ')}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ================= B. 右側主日曆版面 (或在水平版面下之主版面) ================= */}
         <div style={{
@@ -408,14 +612,35 @@ export default function PreviewCanvas({
               </div>
             </div>
 
-            {/* 右側：空白佔位以保持標題完美置中 */}
-            {!isSidebarLayout && (
+            {/* 右側：作品展示照片 */}
+            <div style={{
+              width: isStory ? '100px' : isPortrait ? '80px' : '70px',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              flexShrink: 0
+            }}>
               <div style={{
-                width: isStory ? '100px' : isPortrait ? '80px' : '70px',
-                height: '1px',
-                flexShrink: 0
-              }} />
-            )}
+                width: isStory ? '75px' : isPortrait ? '60px' : '52px',
+                height: isStory ? '105px' : isPortrait ? '85px' : '75px',
+                borderRadius: '8px',
+                border: '2px solid #FFFFFF',
+                boxShadow: '0 6px 15px rgba(0,0,0,0.12)',
+                overflow: 'hidden',
+                transform: 'rotate(5deg)',
+                backgroundColor: '#FFFFFF'
+              }}>
+                <img 
+                  src={activeHeroImg} 
+                  alt="Nail Art Work" 
+                  style={{ 
+                    width: '100%', 
+                    height: '100%', 
+                    objectFit: 'cover' 
+                  }} 
+                />
+              </div>
+            </div>
           </div>
 
               {/* Calendar Grid 區塊 */}
@@ -651,6 +876,88 @@ export default function PreviewCanvas({
               })}
             </div>
           </div>
+
+          {/* ================= C2. 側欄排版時的右側底部金句 (設計感裝飾，比照設計圖) ================= */}
+          {isSidebarLayout && (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: isStory ? '16px' : isPortrait ? '10px' : '8px',
+              padding: isStory ? '14px 20px' : '10px 14px',
+              textAlign: 'center',
+              position: 'relative',
+              width: '100%',
+              boxSizing: 'border-box',
+              flexShrink: 0
+            }}>
+              <span style={{
+                position: 'absolute',
+                left: isStory ? '45px' : isPortrait ? '30px' : '24px',
+                top: isStory ? '-6px' : '-4px',
+                fontSize: isStory ? '36px' : isPortrait ? '28px' : '22px',
+                fontFamily: 'Georgia, serif',
+                opacity: 0.15,
+                color: themeColors.textPrimary,
+                lineHeight: 1
+              }}>
+                “
+              </span>
+              <p style={{
+                fontSize: isStory ? '13px' : isPortrait ? '11px' : '9.5px',
+                fontWeight: '600',
+                letterSpacing: '3px',
+                color: themeColors.textPrimary,
+                margin: '0 0 4px 0',
+                fontFamily: selectedFont.fontFamily,
+                lineHeight: 1.3
+              }}>
+                你的指尖，就是你的風格
+              </p>
+              <p style={{
+                fontSize: isStory ? '12px' : isPortrait ? '10px' : '8.5px',
+                letterSpacing: '2px',
+                color: themeColors.textSecondary,
+                margin: 0,
+                fontFamily: selectedFont.fontFamily,
+                lineHeight: 1.3
+              }}>
+                讓每一次綻放都值得期待
+              </p>
+              <span style={{
+                position: 'absolute',
+                right: isStory ? '45px' : isPortrait ? '30px' : '24px',
+                bottom: isStory ? '4px' : '2px',
+                fontSize: isStory ? '36px' : isPortrait ? '28px' : '22px',
+                fontFamily: 'Georgia, serif',
+                opacity: 0.15,
+                color: themeColors.textPrimary,
+                lineHeight: 1
+              }}>
+                ”
+              </span>
+              
+              {/* Decorative leaves line art in bottom-right corner */}
+              <div style={{
+                position: 'absolute',
+                right: isStory ? '12px' : '4px',
+                bottom: isStory ? '-18px' : '-12px',
+                width: isStory ? '64px' : isPortrait ? '50px' : '40px',
+                height: isStory ? '64px' : isPortrait ? '50px' : '40px',
+                opacity: 0.25,
+                color: themeColors.textSecondary,
+                pointerEvents: 'none'
+              }}>
+                <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.2">
+                  <path d="M 10 90 Q 60 80, 85 10" strokeLinecap="round" />
+                  <path d="M 45 68 C 30 63, 20 50, 24 38 C 28 32, 38 38, 44 48" strokeLinecap="round" />
+                  <path d="M 52 60 C 65 55, 75 42, 70 30 C 66 24, 56 30, 50 40" strokeLinecap="round" />
+                  <path d="M 65 40 C 50 35, 40 22, 44 10 C 48 4, 58 10, 64 20" strokeLinecap="round" />
+                </svg>
+              </div>
+            </div>
+          )}
 
           {/* ================= C. 水平排版時的底部資訊欄 (對稱設計，無邊框卡片，比照設計圖) ================= */}
           {!isSidebarLayout && (

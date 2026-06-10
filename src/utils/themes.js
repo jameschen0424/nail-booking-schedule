@@ -7,7 +7,7 @@ export const THEMES = {
     id: 'sageGreen',
     name: '翡翠綠大理石 (Sage Green)',
     fontFamily: '"Noto Serif TC", "Playfair Display", Georgia, serif',
-    layout: 'footer', // 'sidebar' 代表左側直欄排版，'footer' 代表底部排版
+    layout: 'sidebar', // 'sidebar' 代表左側直欄排版，'footer' 代表底部排版
     colors: {
       background: '#F5F7F6',
       textPrimary: '#2D4846', // 深翡翠綠
