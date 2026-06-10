@@ -23,6 +23,7 @@ export default function PreviewCanvas({
   customBgUrl, 
   logoImgUrl,
   hideBrandText,
+  calendarHeight,
   exportRef 
 }) {
 
@@ -387,14 +388,16 @@ export default function PreviewCanvas({
         {/* ================= B. 右側主日曆版面 (或在水平版面下之主版面) ================= */}
         <div style={{
           flexGrow: 1,
-          display: 'grid',
-          gridTemplateRows: isSidebarLayout ? 'auto 1fr' : 'auto 1fr auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
           height: '100%',
           boxSizing: 'border-box'
         }}>
           {/* Header 區塊 - 左右精緻排版，比照設計圖 */}
           <div style={{ 
             display: 'flex',
+            flexShrink: 0,
             justifyContent: 'space-between',
             alignItems: 'center',
             width: '100%',
@@ -544,7 +547,8 @@ export default function PreviewCanvas({
 
               {/* Calendar Grid 區塊 */}
               <div style={{
-                height: '100%',
+                height: `${calendarHeight}%`,
+                flexShrink: 0,
                 minHeight: 0,
                 backgroundColor: themeColors.cardBg,
                 border: `1px solid ${themeColors.border}90`,
@@ -779,6 +783,7 @@ export default function PreviewCanvas({
           {!isSidebarLayout && (
             <div style={{
               display: 'flex',
+              flexShrink: 0,
               justifyContent: 'space-between',
               alignItems: 'stretch',
               marginTop: isStory ? '14px' : isPortrait ? '10px' : '8px',
@@ -1006,6 +1011,7 @@ export default function PreviewCanvas({
           {!isSidebarLayout && (
             <div style={{
               textAlign: 'center',
+              flexShrink: 0,
               fontSize: isStory ? '8px' : '7px',
               opacity: 0.4,
               marginTop: '4px',
