@@ -743,7 +743,15 @@ export default function PreviewCanvas({
                   overflow: 'hidden'
                 }}>
                   {notesList.slice(0, isSquare ? 2 : 3).map((item, idx) => (
-                    <li key={idx} style={{ marginBottom: '1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <li key={idx} style={{ 
+                      marginBottom: '2px', 
+                      overflow: 'hidden', 
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      lineHeight: 1.2
+                    }}>
                       {item}
                     </li>
                   ))}
@@ -828,7 +836,8 @@ export default function PreviewCanvas({
                   display: 'flex', 
                   flexDirection: 'column', 
                   justifyContent: 'center',
-                  minWidth: 0 // 允許文字裁切或自動縮小
+                  minWidth: 0,
+                  flex: '1 1 0px' // 讓文字區域伸展，佔滿剩餘空間
                 }}>
                   <span style={{ 
                     fontSize: scale.qrLabelFontSize, 
@@ -843,11 +852,13 @@ export default function PreviewCanvas({
                     fontSize: scale.qrDescFontSize, 
                     margin: 0, 
                     opacity: 0.8, 
-                    lineHeight: 1.1,
+                    lineHeight: 1.2,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    width: isStory ? '65px' : isPortrait ? '55px' : '45px'
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    wordBreak: 'break-all'
                   }}>
                     {qrText.replace(/\n/g, ' ')}
                   </p>
