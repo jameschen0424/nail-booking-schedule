@@ -23,7 +23,6 @@ export default function EditorPanel({
   year, setYear,
   month, setMonth,
   theme, setTheme,
-  layout, setLayout,
   aspectRatio, setAspectRatio,
   fontStyle, setFontStyle,
   title, setTitle,
@@ -40,7 +39,6 @@ export default function EditorPanel({
   logoImgUrl, setLogoImgUrl,
   heroImgUrl, setHeroImgUrl,
   hideBrandText, setHideBrandText,
-  calendarHeight, setCalendarHeight,
   onExportPng
 }) {
   const [inputText, setInputText] = useState('');
@@ -652,26 +650,7 @@ export default function EditorPanel({
               </div>
             </div>
 
-            {/* B. 版面排版配置 */}
-            <div className="form-group">
-              <label>版面佈局配置 (Layout)</label>
-              <div className="form-row">
-                <button 
-                  type="button"
-                  className={`btn flex-1 btn-sm ${layout === 'sidebar' ? 'btn-primary' : 'btn-secondary'}`}
-                  onClick={() => setLayout('sidebar')}
-                >
-                  設計感側欄
-                </button>
-                <button 
-                  type="button"
-                  className={`btn flex-1 btn-sm ${layout === 'footer' ? 'btn-primary' : 'btn-secondary'}`}
-                  onClick={() => setLayout('footer')}
-                >
-                  經典置中下置
-                </button>
-              </div>
-            </div>
+
 
             {/* C. 風格字體選擇 */}
             <div className="form-group">
@@ -684,27 +663,7 @@ export default function EditorPanel({
               </select>
             </div>
 
-            {/* 月曆高度比例調整 */}
-            <div className="form-group">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <label style={{ margin: 0 }}>月曆高度佔比 (Calendar Height)</label>
-                <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--primary)' }}>
-                  {calendarHeight}%
-                </span>
-              </div>
-              <input 
-                type="range" 
-                min="35" 
-                max="70" 
-                step="1"
-                value={calendarHeight} 
-                onChange={(e) => setCalendarHeight(parseInt(e.target.value, 10))}
-                style={{ width: '100%', accentColor: 'var(--primary)', cursor: 'pointer' }}
-              />
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0 0', lineHeight: '1.4' }}>
-                調整月曆在畫面中所佔的垂直高度比例，可平衡月曆格子與備註、Logo 的空間配置。
-              </p>
-            </div>
+
 
             <div className="divider" />
 

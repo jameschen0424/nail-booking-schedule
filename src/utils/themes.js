@@ -7,7 +7,6 @@ export const THEMES = {
     id: 'sageGreen',
     name: '翡翠綠大理石 (Sage Green)',
     fontFamily: '"Noto Serif TC", "Playfair Display", Georgia, serif',
-    layout: 'sidebar', // 'sidebar' 代表左側直欄排版，'footer' 代表底部排版
     colors: {
       background: '#F5F7F6',
       textPrimary: '#2D4846', // 深翡翠綠
@@ -48,7 +47,6 @@ export const THEMES = {
     id: 'beigeLuxury',
     name: '法式奶茶金 (Beige Luxury)',
     fontFamily: '"Noto Serif TC", "Playfair Display", Georgia, serif',
-    layout: 'footer',
     colors: {
       background: '#F9F6F0',
       textPrimary: '#6C533F', // 奶茶深褐
@@ -88,7 +86,6 @@ export const THEMES = {
     id: 'turquoiseGold',
     name: '海洋大理石 (Turquoise Gold)',
     fontFamily: '"Noto Sans TC", sans-serif',
-    layout: 'footer',
     colors: {
       background: '#EDF5F4',
       textPrimary: '#1C4746', // 深藍綠
@@ -127,7 +124,6 @@ export const THEMES = {
     id: 'pinkFloral',
     name: '春櫻浪漫粉 (Pink Floral)',
     fontFamily: '"Noto Serif TC", "Playfair Display", Georgia, serif',
-    layout: 'footer',
     colors: {
       background: '#FAF2F3',
       textPrimary: '#7D3E42', // 深櫻粉

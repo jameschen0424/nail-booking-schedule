@@ -23,7 +23,6 @@ export default function App() {
     const savedThemeId = getLocalStorageValue('salon_theme_id', 'sageGreen');
     return THEMES[savedThemeId] || THEMES.sageGreen;
   });
-  const [layout, setLayout] = useState(() => getLocalStorageValue('salon_layout', 'sidebar'));
   const [heroImgUrl, setHeroImgUrl] = useState(() => getLocalStorageValue('salon_heroImgUrl', ''));
   const [aspectRatio, setAspectRatio] = useState(() => getLocalStorageValue('salon_aspectRatio', 'story'));
   const [fontStyle, setFontStyle] = useState(() => getLocalStorageValue('salon_fontStyle', 'serif'));
@@ -45,24 +44,11 @@ export default function App() {
   const [customBgUrl, setCustomBgUrl] = useState(() => getLocalStorageValue('salon_customBgUrl', ''));
   const [logoImgUrl, setLogoImgUrl] = useState(() => getLocalStorageValue('salon_logoImgUrl', ''));
   const [hideBrandText, setHideBrandText] = useState(() => getLocalStorageValue('salon_hideBrandText', false));
-  const [calendarHeight, setCalendarHeight] = useState(() => getLocalStorageValue('salon_calendarHeight', 58));
 
-  // 當比例變更時自動重設月曆高度預設值，確保畫面平衡
-  useEffect(() => {
-    const defaults = {
-      'story': 58,
-      'post-portrait': 52,
-      'post-square': 42
-    };
-    setCalendarHeight(defaults[aspectRatio] || 58);
-  }, [aspectRatio]);
 
-  // 當選擇配色主題時，自動套用其預設版型佈局，但允許後續覆寫
+  // 當選擇配色主題時，自動套用其預設樣式
   const handleSetTheme = (newTheme) => {
     setTheme(newTheme);
-    if (newTheme.layout) {
-      setLayout(newTheme.layout);
-    }
   };
 
   // 班表資料狀態 (從 LocalStorage 載入，否則初始為空物件)
@@ -125,7 +111,6 @@ export default function App() {
       window.localStorage.setItem('salon_year', JSON.stringify(year));
       window.localStorage.setItem('salon_month', JSON.stringify(month));
       window.localStorage.setItem('salon_theme_id', JSON.stringify(theme.id));
-      window.localStorage.setItem('salon_layout', JSON.stringify(layout));
       window.localStorage.setItem('salon_aspectRatio', JSON.stringify(aspectRatio));
       window.localStorage.setItem('salon_fontStyle', JSON.stringify(fontStyle));
       window.localStorage.setItem('salon_title', JSON.stringify(title));
@@ -138,13 +123,12 @@ export default function App() {
       window.localStorage.setItem('salon_qrUrl', JSON.stringify(qrUrl));
       window.localStorage.setItem('salon_qrText', JSON.stringify(qrText));
       window.localStorage.setItem('salon_hideBrandText', JSON.stringify(hideBrandText));
-      window.localStorage.setItem('salon_calendarHeight', JSON.stringify(calendarHeight));
     } catch (e) {
       console.error('Failed to save settings:', e);
     }
   }, [
-    year, month, theme, layout, aspectRatio, fontStyle, title, titleEn,
-    brandName, slogan, staffName, subSlogan, notes, qrUrl, qrText, hideBrandText, calendarHeight
+    year, month, theme, aspectRatio, fontStyle, title, titleEn,
+    brandName, slogan, staffName, subSlogan, notes, qrUrl, qrText, hideBrandText
   ]);
 
   // 分開儲存大型 Base64 檔案以防止超過 localStorage 容量上限
@@ -331,7 +315,6 @@ export default function App() {
           year={year} setYear={setYear}
           month={month} setMonth={setMonth}
           theme={theme} setTheme={handleSetTheme}
-          layout={layout} setLayout={setLayout}
           aspectRatio={aspectRatio} setAspectRatio={setAspectRatio}
           fontStyle={fontStyle} setFontStyle={setFontStyle}
           title={title} setTitle={setTitle}
@@ -348,7 +331,6 @@ export default function App() {
           logoImgUrl={logoImgUrl} setLogoImgUrl={setLogoImgUrl}
           heroImgUrl={heroImgUrl} setHeroImgUrl={setHeroImgUrl}
           hideBrandText={hideBrandText} setHideBrandText={setHideBrandText}
-          calendarHeight={calendarHeight} setCalendarHeight={setCalendarHeight}
           onExportPng={handleExport}
         />
       </aside>
@@ -381,7 +363,6 @@ export default function App() {
             year={year}
             month={month}
             theme={theme}
-            layout={layout}
             aspectRatio={aspectRatio}
             fontStyle={fontStyle}
             title={title}
@@ -398,7 +379,6 @@ export default function App() {
             logoImgUrl={logoImgUrl}
             heroImgUrl={heroImgUrl}
             hideBrandText={hideBrandText}
-            calendarHeight={calendarHeight}
             exportRef={exportRef}
           />
         </div>
