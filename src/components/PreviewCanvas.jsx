@@ -193,8 +193,8 @@ export default function PreviewCanvas({
         color: themeColors.textPrimary,
         overflow: 'hidden',
         userSelect: 'none',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
-        borderRadius: '8px',
+        boxShadow: '0 24px 60px rgba(108, 83, 63, 0.08)',
+        borderRadius: '24px',
         ...backgroundStyle
       }}
     >
@@ -440,7 +440,9 @@ export default function PreviewCanvas({
                 fontFamily: '"Great Vibes", "Dancing Script", cursive', 
                 color: theme.id === 'pinkFloral' ? themeColors.textSecondary : themeColors.accent,
                 lineHeight: 1,
-                textShadow: '1px 1px 0px rgba(255, 255, 255, 0.8)'
+                textShadow: '1px 1px 0px rgba(255, 255, 255, 0.8)',
+                transform: 'rotate(-8deg) translateY(-2px)',
+                transformOrigin: 'left bottom'
               }}>
                 {getEnglishMonthShort(month)}
               </span>
@@ -470,18 +472,30 @@ export default function PreviewCanvas({
 
               {/* NAIL APPOINTMENT SCHEDULE */}
               {titleEn && (
-                <div style={{ 
-                  fontSize: isStory ? '8px' : '7.5px', 
-                  letterSpacing: '1.5px', 
-                  opacity: 0.7, 
-                  textTransform: 'uppercase',
-                  color: themeColors.textSecondary,
-                  marginTop: '2px',
-                  marginBottom: '2px',
-                  fontWeight: '600'
-                }}>
-                  {titleEn}
-                </div>
+                <>
+                  <div style={{ 
+                    fontSize: isStory ? '8px' : '7.5px', 
+                    letterSpacing: '1.5px', 
+                    opacity: 0.7, 
+                    textTransform: 'uppercase',
+                    color: themeColors.textSecondary,
+                    marginTop: '2px',
+                    marginBottom: '2px',
+                    fontWeight: '600'
+                  }}>
+                    {titleEn}
+                  </div>
+                  <div style={{
+                    fontSize: isStory ? '8px' : '6px',
+                    color: theme.id === 'pinkFloral' ? themeColors.textSecondary : themeColors.accent,
+                    opacity: 0.6,
+                    margin: '1px 0 3px 0',
+                    letterSpacing: '3px',
+                    fontWeight: 'normal'
+                  }}>
+                    ✦ ✧ ✦
+                  </div>
+                </>
               )}
 
               {/* 副標語 */}
@@ -534,11 +548,12 @@ export default function PreviewCanvas({
                 minHeight: 0,
                 backgroundColor: themeColors.cardBg,
                 border: `1px solid ${themeColors.border}90`,
-                borderRadius: '10px',
+                borderRadius: '16px',
                 padding: scale.calendarPadding,
                 display: 'grid',
                 gridTemplateRows: 'auto 1fr',
-                boxShadow: '0 8px 25px rgba(0,0,0,0.02)'
+                boxShadow: '0 10px 30px rgba(108, 83, 63, 0.04)',
+                overflow: 'hidden'
               }}>
                 {/* 星期 Header */}
                 <div style={{
@@ -546,11 +561,11 @@ export default function PreviewCanvas({
                   gridTemplateColumns: 'repeat(7, 1fr)',
                   backgroundColor: themeColors.headerBg,
                   color: '#FFFFFF',
-                  borderRadius: '6px',
+                  borderRadius: '10px',
                   padding: '4px 0',
                   marginBottom: isStory ? '8px' : '4px',
                   textAlign: 'center',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+                  boxShadow: '0 4px 12px rgba(108, 83, 63, 0.05)'
                 }}>
                   {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((w, idx) => {
                     const weekCh = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'][idx];
@@ -679,7 +694,7 @@ export default function PreviewCanvas({
                                     fontSize: dynamicFontSize,
                                     lineHeight: '1.15',
                                     padding: slotPadding,
-                                    borderRadius: '4px',
+                                    borderRadius: '20px',
                                     backgroundColor: themeColors.slotBg,
                                     color: themeColors.slotText,
                                     width: '100%',
@@ -729,7 +744,7 @@ export default function PreviewCanvas({
                                     fontSize: dynamicFontSize,
                                     lineHeight: '1.2',
                                     padding: scale.slotPadding,
-                                    borderRadius: '4px',
+                                    borderRadius: '20px',
                                     backgroundColor: themeColors.slotBg,
                                     color: themeColors.slotText,
                                     width: '100%',
@@ -800,11 +815,11 @@ export default function PreviewCanvas({
                 </div>
                 <div style={{
                   border: `1.5px solid ${themeColors.border}`,
-                  borderRadius: '8px',
-                  padding: isStory ? '8px 10px' : '6px 8px',
+                  borderRadius: '16px',
+                  padding: isStory ? '12px 14px' : '8px 10px',
                   backgroundColor: 'rgba(255, 255, 255, 0.45)',
                   marginTop: '4px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.01)',
+                  boxShadow: '0 4px 15px rgba(108, 83, 63, 0.02)',
                   flexGrow: 1,
                   overflow: 'hidden'
                 }}>
@@ -946,14 +961,14 @@ export default function PreviewCanvas({
                   justifyContent: 'flex-end'
                 }}>
                   <div style={{
-                    border: `1px solid ${themeColors.border}`,
+                    border: `1.5px solid ${themeColors.border}`,
                     padding: '2px',
-                    borderRadius: '6px',
+                    borderRadius: '12px',
                     backgroundColor: '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
+                    boxShadow: '0 4px 12px rgba(108, 83, 63, 0.03)'
                   }}>
                     <QRCodeGen url={qrUrl} color={themeColors.textPrimary} size={scale.qrSize} />
                   </div>
