@@ -159,7 +159,7 @@ export default function App() {
     }
   }, [customBgUrl]);
 
-  // 動態計算縮放比例以適應視窗大小 (使用 ResizeObserver 確保高度與寬度在加載完畢後能正確反應，避免預覽卡片變得很小)
+  // 動態計算縮放比例以適應視窗大小
   useEffect(() => {
     if (!previewAreaRef.current) return;
 
@@ -173,7 +173,7 @@ export default function App() {
       const currentWidth = window.innerWidth;
       const currentHeight = window.innerHeight;
       
-      // 視窗大小無任何實質改變時直接返回，防止滾動條出現/消失等內部排版觸發無限 ResizeObserver 迴圈
+      // 視窗大小無任何實質改變時直接返回，防止滾動條出現/消失等內部排版觸發無限迴圈
       if (
         lastWindowSizeRef.current.width === currentWidth &&
         lastWindowSizeRef.current.height === currentHeight
@@ -197,7 +197,7 @@ export default function App() {
       const scaleX = parentWidth / size.width;
       const scaleY = parentHeight / size.height;
       
-      // 手機版高度為自適應滾動，僅依據寬度縮放以防止 ResizeObserver 無限迴圈導致網頁卡死
+      // 手機版高度為自適應滾動，僅依據寬度縮放以防止無限迴圈導致網頁卡死
       let factor = isMobile ? scaleX : Math.min(scaleX, scaleY);
       if (factor > 1.1) factor = 1.1; // 上限
       if (factor < 0.15) factor = 0.15; // 下限
@@ -209,15 +209,11 @@ export default function App() {
       });
     };
 
-    const observer = new ResizeObserver(() => {
-      handleResize();
-    });
-    
-    observer.observe(previewAreaRef.current);
+    window.addEventListener('resize', handleResize);
     handleResize(); // 立即計算一次
     
     return () => {
-      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
     };
   }, [aspectRatio]);
 
