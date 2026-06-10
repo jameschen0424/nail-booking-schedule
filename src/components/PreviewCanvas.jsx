@@ -387,87 +387,87 @@ export default function PreviewCanvas({
           height: '100%',
           boxSizing: 'border-box'
         }}>
-          {/* Header 區塊 */}
+          {/* Header 區塊 - 左右精緻雜誌排版，高度大幅壓縮，留給下方日曆最大空間 */}
           <div style={{ 
-            textAlign: 'center', 
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            width: '100%',
             marginBottom: scale.headerMarginBottom,
-            marginTop: scale.headerMarginTop
+            marginTop: scale.headerMarginTop,
+            borderBottom: `1px dashed ${themeColors.border}80`,
+            paddingBottom: isStory ? '8px' : '4px',
+            boxSizing: 'border-box'
           }}>
-            {/* 年月份顯示 */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: '8px' }}>
+            {/* 左側：大月份與英月份/年份 */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: isStory ? '10px' : '6px' }}>
               <span style={{ 
                 fontSize: scale.monthFontSize, 
                 fontWeight: '700', 
-                lineHeight: 1, 
+                lineHeight: 0.9, 
                 color: themeColors.textPrimary,
                 fontFamily: selectedFont.titleFontFamily
               }}>
                 {month.toString().padStart(2, '0')}
               </span>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{ fontSize: scale.yearFontSize, opacity: 0.7, letterSpacing: '1px' }}>{year}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1 }}>
                 <span style={{ 
                   fontSize: scale.enMonthFontSize, 
                   fontFamily: selectedFont.scriptFontFamily, 
                   fontStyle: fontStyle === 'serif' || fontStyle === 'cursive' ? 'italic' : 'normal',
                   color: themeColors.accent,
-                  lineHeight: 1
+                  marginBottom: '2px'
                 }}>
                   {getEnglishMonthShort(month)}
                 </span>
+                <span style={{ fontSize: scale.yearFontSize, opacity: 0.6, letterSpacing: '1px' }}>{year}</span>
               </div>
             </div>
 
-            {/* 標題與標語 */}
-            <h1 style={{ 
-              fontSize: scale.mainTitleFontSize, 
-              fontWeight: '700', 
-              margin: isStory ? '6px 0 2px 0' : '2px 0 1px 0', 
-              letterSpacing: '3px',
-              color: themeColors.textPrimary
-            }}>
-              {title}
-            </h1>
-
-            {/* 英文副標題 */}
-            {titleEn && (
-              <div style={{ 
-                fontSize: isStory ? '8.5px' : '7.5px', 
-                letterSpacing: '1.5px', 
-                opacity: 0.8, 
-                textTransform: 'uppercase',
-                color: themeColors.textSecondary,
-                marginBottom: isStory ? '6px' : '3px',
-                marginTop: '-2px'
-              }}>
-                {titleEn}
-              </div>
-            )}
-            
-            {/* 美麗，從指尖開始 */}
-            <div style={{ 
-              fontSize: scale.subSloganFontSize, 
-              opacity: 0.8, 
-              fontStyle: 'italic', 
-              marginBottom: isStory ? '8px' : '4px' 
-            }}>
-              {subSlogan}
-            </div>
-
-            {/* 美甲師預約時段 Banner */}
-            <div style={{ display: 'inline-block', position: 'relative' }}>
-              <div style={{
-                fontSize: scale.staffNameFontSize,
-                fontWeight: 'bold',
-                padding: scale.staffNamePadding,
-                border: `1px solid ${themeColors.accent}`,
-                borderRadius: '20px',
+            {/* 右側：標題、美甲師名稱與副標題 */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right' }}>
+              {/* 預約空檔表 */}
+              <h1 style={{ 
+                fontSize: scale.mainTitleFontSize, 
+                fontWeight: '700', 
+                margin: 0, 
+                letterSpacing: '2px',
                 color: themeColors.textPrimary,
-                backgroundColor: themeColors.cardBg,
-                letterSpacing: '1.5px'
+                lineHeight: 1.1
               }}>
-                ✦ {staffName} 可預約時段 ✦
+                {title}
+              </h1>
+
+              {/* 美甲師名稱 */}
+              <div style={{ marginTop: isStory ? '5px' : '3px' }}>
+                <span style={{
+                  fontSize: scale.staffNameFontSize,
+                  fontWeight: 'bold',
+                  padding: scale.staffNamePadding,
+                  border: `1px solid ${themeColors.accent}`,
+                  borderRadius: '20px',
+                  color: themeColors.textPrimary,
+                  backgroundColor: themeColors.cardBg,
+                  letterSpacing: '1px',
+                  lineHeight: 1,
+                  display: 'inline-block'
+                }}>
+                  ✦ {staffName} 可預約時段 ✦
+                </span>
               </div>
+
+              {/* 副標語 */}
+              {subSlogan && (
+                <div style={{ 
+                  fontSize: scale.subSloganFontSize, 
+                  opacity: 0.7, 
+                  fontStyle: 'italic',
+                  marginTop: isStory ? '4px' : '2px',
+                  lineHeight: 1
+                }}>
+                  {subSlogan}
+                </div>
+              )}
             </div>
           </div>
 
