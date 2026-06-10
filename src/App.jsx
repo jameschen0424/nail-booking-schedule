@@ -166,8 +166,9 @@ export default function App() {
       const el = previewAreaRef.current;
       if (!el) return;
       
-      const parentWidth = el.clientWidth - 40; // 左右 padding
-      const parentHeight = el.clientHeight - 120; // 上下標示與邊界
+      const isMobile = window.innerWidth <= 960;
+      const parentWidth = el.clientWidth - (isMobile ? 32 : 40); // 左右 padding
+      const parentHeight = el.clientHeight - 120; // 上下 標示與邊界
       
       const DIMENSIONS = {
         'story': { width: 540, height: 960 },
@@ -179,11 +180,16 @@ export default function App() {
       const scaleX = parentWidth / size.width;
       const scaleY = parentHeight / size.height;
       
-      let factor = Math.min(scaleX, scaleY);
+      // 手機版高度為自適應滾動，僅依據寬度縮放以防止 ResizeObserver 無限迴圈導致網頁卡死
+      let factor = isMobile ? scaleX : Math.min(scaleX, scaleY);
       if (factor > 1.1) factor = 1.1; // 上限
       if (factor < 0.15) factor = 0.15; // 下限
       
-      setScaleFactor(factor);
+      setScaleFactor((prev) => {
+        // 若變化小於萬分之一則不更新狀態，避免 subpixel 微幅震盪
+        if (Math.abs(prev - factor) < 0.0001) return prev;
+        return factor;
+      });
     };
 
     const observer = new ResizeObserver(() => {

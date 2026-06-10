@@ -50,6 +50,18 @@ export default function PreviewCanvas({
 
   const selectedFont = FONT_STYLES[fontStyle] || FONT_STYLES.serif;
 
+  // 依據時段文字長度動態調整字型大小，避免摺行或溢出
+  const getSlotFontSize = (slotText, baseFontSizeStr) => {
+    if (!slotText) return baseFontSizeStr;
+    if (slotText.length > 8) {
+      return `calc(${baseFontSizeStr} * 0.76)`;
+    }
+    if (slotText.length > 5) {
+      return `calc(${baseFontSizeStr} * 0.88)`;
+    }
+    return baseFontSizeStr;
+  };
+
   // 計算日曆網格所需的日期資料 (提早計算以供縮放係數使用)
   const getDaysInMonth = (y, m) => new Date(y, m, 0).getDate();
   const getFirstDayOfWeek = (y, m) => new Date(y, m - 1, 1).getDay();
@@ -508,7 +520,7 @@ export default function PreviewCanvas({
               display: 'grid',
               gridTemplateColumns: 'repeat(7, 1fr)',
               gridTemplateRows: `repeat(${Math.ceil(calendarCells.length / 7)}, 1fr)`,
-              flex: '1 1 0px',
+              flex: '1 1 auto',
               minHeight: 0,
               gap: isSquare ? '2px' : '4px'
             }}>
@@ -540,7 +552,8 @@ export default function PreviewCanvas({
                       alignItems: 'stretch',
                       backgroundColor: isTodayOff ? 'transparent' : 'rgba(255,255,255,0.4)',
                       opacity: isTodayOff ? 0.8 : 1,
-                      boxSizing: 'border-box'
+                      boxSizing: 'border-box',
+                      overflow: 'hidden'
                     }}
                   >
                     {/* 日期標題 */}
@@ -593,12 +606,13 @@ export default function PreviewCanvas({
                         }}>
                           {displayedSlots.map((slot, sIdx) => {
                             const slotFontSize = `calc(${scale.slotFontSize} * 0.9)`;
+                            const dynamicFontSize = getSlotFontSize(slot, slotFontSize);
                             const slotPadding = isSquare ? '1px 1px' : '1px 1.5px';
                             return (
                               <div 
                                 key={sIdx} 
                                 style={{
-                                  fontSize: slotFontSize,
+                                  fontSize: dynamicFontSize,
                                   lineHeight: '1.1',
                                   padding: slotPadding,
                                   borderRadius: '2px',
@@ -643,26 +657,33 @@ export default function PreviewCanvas({
                           boxSizing: 'border-box',
                           alignItems: 'center'
                         }}>
-                          {displayedSlots.map((slot, sIdx) => (
-                            <div 
-                              key={sIdx} 
-                              style={{
-                                fontSize: scale.slotFontSize,
-                                lineHeight: '1.2',
-                                padding: scale.slotPadding,
-                                borderRadius: '2px',
-                                backgroundColor: themeColors.slotBg,
-                                color: themeColors.slotText,
-                                width: '100%',
-                                textAlign: 'center',
-                                boxSizing: 'border-box',
-                                fontWeight: '600',
-                                border: `1px solid ${themeColors.textPrimary}2e`
-                              }}
-                            >
-                              {slot}
-                            </div>
-                          ))}
+                          {displayedSlots.map((slot, sIdx) => {
+                            const dynamicFontSize = getSlotFontSize(slot, scale.slotFontSize);
+                            return (
+                              <div 
+                                key={sIdx} 
+                                style={{
+                                  fontSize: dynamicFontSize,
+                                  lineHeight: '1.2',
+                                  padding: scale.slotPadding,
+                                  borderRadius: '2px',
+                                  backgroundColor: themeColors.slotBg,
+                                  color: themeColors.slotText,
+                                  width: '100%',
+                                  textAlign: 'center',
+                                  boxSizing: 'border-box',
+                                  fontWeight: '600',
+                                  border: `1px solid ${themeColors.textPrimary}2e`,
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
+                                  display: 'block'
+                                }}
+                              >
+                                {slot}
+                              </div>
+                            );
+                          })}
                           {hasMoreSlots && (
                             <div style={{ fontSize: '7px', opacity: 0.5, textAlign: 'center', lineHeight: 1 }}>
                               •••
