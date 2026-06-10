@@ -139,7 +139,7 @@ export default function PreviewCanvas({
 
   const themeColors = theme.colors;
 
-  const isSidebarLayout = layout === 'sidebar';
+  const isSidebarLayout = false;
 
   // 背景圖風格
   const backgroundStyle = customBgUrl ? {
@@ -256,134 +256,7 @@ export default function PreviewCanvas({
         zIndex: 2
       }}>
         
-        {/* ================= A. 側欄排版時的左側資訊欄 ================= */}
-        {isSidebarLayout && (
-          <div style={{
-            width: isStory ? '135px' : isPortrait ? '125px' : '115px',
-            marginRight: isStory ? '16px' : '10px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '100%',
-            boxSizing: 'border-box'
-          }}>
-            {/* 左側頂部 品牌名/標語 */}
-            <div style={{
-              border: `1px solid ${themeColors.border}`,
-              backgroundColor: themeColors.cardBg,
-              padding: isStory ? '16px 10px' : isPortrait ? '10px 6px' : '8px 4px',
-              borderRadius: isStory ? '60px 60px 10px 10px' : '40px 40px 8px 8px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.01)',
-              width: '100%'
-            }}>
-              <div style={{ 
-                width: hideBrandText 
-                  ? (isStory ? '85px' : '65px') 
-                  : (logoImgUrl ? (isStory ? '45px' : '32px') : (isStory ? '32px' : '22px')), 
-                height: hideBrandText 
-                  ? (isStory ? '85px' : '65px') 
-                  : (logoImgUrl ? (isStory ? '45px' : '32px') : (isStory ? '32px' : '22px')), 
-                color: themeColors.accent, 
-                marginBottom: hideBrandText ? '0px' : (isStory ? '8px' : '4px'),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {logoImgUrl ? (
-                  <img src={logoImgUrl} alt="Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-                ) : (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                    <path d="M12 2C8 6 4 10 4 15a8 8 0 0 0 16 0c0-5-4-9-8-13Z" />
-                  </svg>
-                )}
-              </div>
-              {!hideBrandText && (
-                <>
-                  <h3 style={{ 
-                    fontSize: isStory ? '15px' : '13px', 
-                    fontWeight: 'bold', 
-                    margin: '0 0 4px 0', 
-                    letterSpacing: '1px' 
-                  }}>
-                    {brandName}
-                  </h3>
-                  <p style={{ fontSize: isStory ? '9px' : '8px', margin: 0, opacity: 0.8, lineHeight: 1.2 }}>
-                    {slogan}
-                  </p>
-                </>
-              )}
-            </div>
 
-            {/* 左側中部 預約須知 */}
-            <div style={{
-              margin: isStory ? '16px 0' : '8px 0',
-              border: `1px solid ${themeColors.border}`,
-              backgroundColor: themeColors.cardBg,
-              padding: isStory ? '12px 8px' : '8px 6px',
-              borderRadius: '8px',
-              flexGrow: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.01)',
-              overflow: 'hidden'
-            }}>
-              <h4 style={{ 
-                fontSize: isStory ? '11px' : '10px', 
-                margin: '0 0 6px 0', 
-                textAlign: 'center', 
-                borderBottom: `1px solid ${themeColors.border}`,
-                paddingBottom: '4px',
-                letterSpacing: '1px',
-                fontWeight: 'bold'
-              }}>
-                ✦ 預約須知 ✦
-              </h4>
-              <ul style={{ 
-                margin: 0, 
-                padding: '0 4px 0 12px', 
-                fontSize: isStory ? '9.5px' : isPortrait ? '8px' : '7.5px', 
-                lineHeight: 1.4,
-                opacity: 0.9,
-                listStyleType: 'disc',
-                overflow: 'hidden'
-              }}>
-                {notesList.map((item, idx) => (
-                  <li key={idx} style={{ marginBottom: isStory ? '5px' : '3px' }}>{item}</li>
-                ))}
-              </ul>
-            </div>
-
-            {/* 左側底部 QR Code 預約 */}
-            <div style={{
-              border: `1px solid ${themeColors.border}`,
-              backgroundColor: themeColors.cardBg,
-              padding: isStory ? '12px 6px' : '8px 4px',
-              borderRadius: '8px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.01)'
-            }}>
-              <span style={{ 
-                fontSize: isStory ? '10px' : '8px', 
-                fontWeight: 'bold', 
-                marginBottom: '4px', 
-                color: themeColors.textPrimary 
-              }}>
-                立即預約
-              </span>
-              <QRCodeGen url={qrUrl} color={themeColors.textPrimary} size={isStory ? 65 : 50} />
-              <p style={{ fontSize: isStory ? '7.5px' : '6px', margin: '4px 0 0 0', opacity: 0.8, lineHeight: 1.2 }}>
-                {qrText}
-              </p>
-            </div>
-          </div>
-        )}
 
         {/* ================= B. 右側主日曆版面 (或在水平版面下之主版面) ================= */}
         <div style={{

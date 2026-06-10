@@ -596,27 +596,6 @@ export default function EditorPanel({
               </div>
             </div>
 
-            {/* B. 版面排版配置 */}
-            <div className="form-group">
-              <label>版面佈局配置 (Layout)</label>
-              <div className="form-row">
-                <button 
-                  type="button"
-                  className={`btn flex-1 btn-sm ${layout === 'sidebar' ? 'btn-primary' : 'btn-secondary'}`}
-                  onClick={() => setLayout('sidebar')}
-                >
-                  設計感側欄
-                </button>
-                <button 
-                  type="button"
-                  className={`btn flex-1 btn-sm ${layout === 'footer' ? 'btn-primary' : 'btn-secondary'}`}
-                  onClick={() => setLayout('footer')}
-                >
-                  經典置中下置
-                </button>
-              </div>
-            </div>
-
             {/* C. 風格字體選擇 */}
             <div className="form-group">
               <label>風格字型搭配 (Typography)</label>

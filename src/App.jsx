@@ -23,7 +23,10 @@ export default function App() {
     const savedThemeId = getLocalStorageValue('salon_theme_id', 'sageGreen');
     return THEMES[savedThemeId] || THEMES.sageGreen;
   });
-  const [layout, setLayout] = useState(() => getLocalStorageValue('salon_layout', 'sidebar'));
+  const [layout, setLayout] = useState(() => {
+    const val = getLocalStorageValue('salon_layout', 'footer');
+    return val === 'sidebar' ? 'footer' : val;
+  });
   const [aspectRatio, setAspectRatio] = useState(() => getLocalStorageValue('salon_aspectRatio', 'story'));
   const [fontStyle, setFontStyle] = useState(() => getLocalStorageValue('salon_fontStyle', 'serif'));
   const [title, setTitle] = useState(() => getLocalStorageValue('salon_title', '美甲預約表'));
