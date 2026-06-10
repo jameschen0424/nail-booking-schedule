@@ -518,29 +518,13 @@ export default function PreviewCanvas({
               </div>
             </div>
 
-            {/* 右側：Logo 或 美麗美甲作品照 */}
+            {/* 右側：空白佔位以保持標題完美置中 */}
             {!isSidebarLayout && (
               <div style={{
-                width: isStory ? '75px' : isPortrait ? '60px' : '52px',
-                height: isStory ? '105px' : isPortrait ? '85px' : '75px',
-                borderRadius: '8px',
-                border: '2px solid #FFFFFF',
-                boxShadow: '0 6px 15px rgba(0,0,0,0.12)',
-                overflow: 'hidden',
-                transform: 'rotate(5deg)',
-                backgroundColor: '#FFFFFF',
+                width: isStory ? '100px' : isPortrait ? '80px' : '70px',
+                height: '1px',
                 flexShrink: 0
-              }}>
-                <img 
-                  src={logoImgUrl || defaultHeroImg} 
-                  alt="Nail Art" 
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover' 
-                  }} 
-                />
-              </div>
+              }} />
             )}
           </div>
 
