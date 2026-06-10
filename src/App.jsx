@@ -163,6 +163,9 @@ export default function App() {
   useEffect(() => {
     if (!previewAreaRef.current) return;
 
+    // 當比例或版型變更時重設視窗大小快取，確保重新計算縮放
+    lastWindowSizeRef.current = { width: 0, height: 0 };
+
     const handleResize = () => {
       const el = previewAreaRef.current;
       if (!el) return;

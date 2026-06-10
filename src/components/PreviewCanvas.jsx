@@ -521,6 +521,7 @@ export default function PreviewCanvas({
               gridTemplateColumns: 'repeat(7, 1fr)',
               gridTemplateRows: `repeat(${Math.ceil(calendarCells.length / 7)}, 1fr)`,
               minHeight: 0,
+              height: '100%',
               gap: isSquare ? '2px' : '4px'
             }}>
               {calendarCells.map((cell, index) => {
