@@ -533,9 +533,9 @@ export default function PreviewCanvas({
                 const dayOfWeek = index % 7;
                 const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
-                // 為了避免在極小高度下爆格，當日班表多於 2 個時，改用雙欄位並排顯示，最多顯示 6 個時段，多於 6 個則顯示 "•••"
-                const useTwoColumns = cell.slots.length > 2;
-                const maxVisibleSlots = useTwoColumns ? 6 : 2;
+                // 當日班表為 3 個（含）以下時，採用單欄位顯示（一行一個）；大於 3 個時，改用雙欄位並排顯示（一行兩個），最多顯示 6 個
+                const useTwoColumns = cell.slots.length > 3;
+                const maxVisibleSlots = useTwoColumns ? 6 : 3;
                 const displayedSlots = cell.slots.slice(0, maxVisibleSlots);
                 const hasMoreSlots = cell.slots.length > maxVisibleSlots;
 
