@@ -4,7 +4,7 @@ html, body, #root {
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
-  background-color: #090d16;
+  background-color: #FAF8F5; /* 配合奢華奶茶配色，防止出現暗黑背景空隙 */
 }
 
 * {

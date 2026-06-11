@@ -1136,6 +1136,7 @@ input[type="checkbox"] {
     min-width: 0;
     max-width: 100%;
     height: auto;
+    min-height: 100vh; /* 確保在任何長高視窗中編輯器面板都填滿整頁高度，防止底部出現黑邊隙縫 */
     border-right: none;
     border-bottom: 1px solid var(--border-glass);
     box-shadow: 0 10px 30px rgba(108, 83, 63, 0.05);
