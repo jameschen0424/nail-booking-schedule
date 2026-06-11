@@ -315,7 +315,7 @@ export default function App() {
             onClick={handleExport}
           >
             <Sparkles size={14} />
-            <span>產出圖片</span>
+            <span>下載圖片</span>
           </button>
         </div>
 
