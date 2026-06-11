@@ -113,9 +113,10 @@ export const THEMES = {
         </svg>
       `,
       leafIcon: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="9" stroke-dasharray="2 2"/>
-          <path d="M8 12h8M12 8v8"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 20 Q 12 18, 18 4" />
+          <path d="M9 15 C 6 13, 5 10, 6 8 C 7 7, 9 8, 11 11" />
+          <path d="M13 11 C 15 9, 17 8, 18 10 C 19 12, 17 14, 14 15" />
         </svg>
       `
     }
@@ -155,9 +156,10 @@ export const THEMES = {
         </svg>
       `,
       leafIcon: `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2Zm0 17a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" fill="#FCE9EB"/>
-          <path d="M12 8v8M8 12h8"/>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 20 Q 12 18, 18 4" />
+          <path d="M9 15 C 6 13, 5 10, 6 8 C 7 7, 9 8, 11 11" fill="#FCE9EB" />
+          <path d="M13 11 C 15 9, 17 8, 18 10 C 19 12, 17 14, 14 15" fill="#FCE9EB" />
         </svg>
       `
     }

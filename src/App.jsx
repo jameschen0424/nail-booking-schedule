@@ -170,19 +170,27 @@ export default function App() {
       
       const currentWidth = window.innerWidth;
       const currentHeight = window.innerHeight;
+      const isMobile = currentWidth <= 960;
       
-      // 視窗大小無任何實質改變時直接返回，防止滾動條出現/消失等內部排版觸發無限迴圈
-      if (
-        lastWindowSizeRef.current.width === currentWidth &&
-        lastWindowSizeRef.current.height === currentHeight
-      ) {
-        return;
+      // 判斷是否需要重新計算，避免手機端網址列收合觸發 resize 導致卡頓與重新渲染：
+      // 1. 如果是手機版，只有當寬度改變時才重新計算（忽略高度變化）
+      // 2. 如果是桌機版，寬度或高度任一改變時重新計算
+      if (isMobile) {
+        if (lastWindowSizeRef.current.width === currentWidth) {
+          return;
+        }
+      } else {
+        if (
+          lastWindowSizeRef.current.width === currentWidth &&
+          lastWindowSizeRef.current.height === currentHeight
+        ) {
+          return;
+        }
       }
       
       lastWindowSizeRef.current = { width: currentWidth, height: currentHeight };
       
-      const isMobile = currentWidth <= 960;
-      const parentWidth = el.clientWidth - (isMobile ? 32 : 40); // 左右 padding
+      const parentWidth = isMobile ? (currentWidth - 32) : (el.clientWidth - 40); // 左右 padding
       const parentHeight = el.clientHeight - 120; // 上下 標示與邊界
       
       const DIMENSIONS = {
@@ -201,8 +209,8 @@ export default function App() {
       if (factor < 0.15) factor = 0.15; // 下限
       
       setScaleFactor((prev) => {
-        // 若變化小於萬分之一則不更新狀態，避免 subpixel 微幅震盪
-        if (Math.abs(prev - factor) < 0.0001) return prev;
+        // 若變化小於 0.005 (0.5%) 則不更新狀態，避免微小的亞像素變化或滾動微調引發頻繁重繪與閃爍
+        if (Math.abs(prev - factor) < 0.005) return prev;
         return factor;
       });
     };
@@ -336,15 +344,17 @@ export default function App() {
           </span>
         </div>
 
-        {/* 縮放 wrapper 確保在小螢幕能看到全貌 */}
+        {/* 縮放 wrapper 確保在小螢幕能看到全貌，並加上左右負邊距補償，避免 layout width 溢出導致手機版左右滑動異常 */}
         <div 
           className="preview-scaler-container"
           style={{
             transform: `scale(${scaleFactor})`,
-            width: `${aspectRatio === 'story' ? 540 : aspectRatio === 'post-portrait' ? 540 : 540}px`,
+            width: `540px`,
             height: `${aspectRatio === 'story' ? 960 : aspectRatio === 'post-portrait' ? 675 : 540}px`,
             marginTop: `${(scaleFactor - 1) * (aspectRatio === 'story' ? 480 : aspectRatio === 'post-portrait' ? 337.5 : 270)}px`,
-            marginBottom: `${(scaleFactor - 1) * (aspectRatio === 'story' ? 480 : aspectRatio === 'post-portrait' ? 337.5 : 270)}px`
+            marginBottom: `${(scaleFactor - 1) * (aspectRatio === 'story' ? 480 : aspectRatio === 'post-portrait' ? 337.5 : 270)}px`,
+            marginLeft: `${(scaleFactor - 1) * 270}px`,
+            marginRight: `${(scaleFactor - 1) * 270}px`
           }}
         >
           <PreviewCanvas 
