@@ -1066,6 +1066,17 @@ input[type="checkbox"] {
   margin-top: 6px;
 }
 
+/* ================= 手機端抽屜式預覽與遮罩元件 (Desktop Defaults) ================= */
+.preview-backdrop {
+  display: none;
+}
+.mobile-preview-header {
+  display: none;
+}
+.mobile-preview-toggle-btn {
+  display: none;
+}
+
 /* ================= 響應式排版 (Mobile & Tablet) ================= */
 @media (max-width: 960px) {
   .app-bg-glow {
@@ -1101,10 +1112,125 @@ input[type="checkbox"] {
     max-height: 420px;
   }
 
+  .preview-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(43, 33, 25, 0.45); /* 焦糖褐色半透明遮罩 */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .preview-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .preview-area {
-    padding: 30px 16px;
-    height: auto;
-    min-height: 600px;
-    overflow: visible !important; /* 確保手機端縮放畫布及相關提示能完整顯示不被裁切 */
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 85vh !important;
+    max-height: 85vh !important;
+    min-height: 0 !important;
+    z-index: 1000 !important;
+    padding: 16px 20px 32px 20px !important;
+    border-radius: 24px 24px 0 0 !important;
+    box-shadow: 0 -12px 40px rgba(43, 33, 25, 0.15) !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    
+    /* 抽屜過渡動畫 */
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transform: translateY(100%) !important;
+  }
+
+  .preview-area.is-open {
+    transform: translateY(0) !important;
+  }
+
+  .mobile-preview-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(197, 168, 128, 0.25);
+    margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+
+  .drawer-handle {
+    width: 40px;
+    height: 4px;
+    background: rgba(92, 69, 51, 0.18);
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+
+  .mobile-preview-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 16px;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+
+  .mobile-preview-close-btn:active {
+    background: rgba(92, 69, 51, 0.05);
+    color: var(--text-light);
+  }
+
+  .mobile-preview-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 998;
+    background: #5C4533; /* 品牌深焦糖褐 */
+    color: #FAF8F5;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 26px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(92, 69, 51, 0.28);
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+    animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-preview-toggle-btn:active {
+    transform: translateX(-50%) scale(0.94);
+    background: #463223;
+  }
+
+  @keyframes bounceIn {
+    from { transform: translateX(-50%) translateY(40px) scale(0.8); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
   }
 }

@@ -3,7 +3,7 @@ import { toPng } from 'html-to-image';
 import { THEMES } from './utils/themes';
 import EditorPanel from './components/EditorPanel';
 import PreviewCanvas from './components/PreviewCanvas';
-import { Sparkles, Copy, Download, X, HelpCircle, PhoneCall, Info } from 'lucide-react';
+import { Sparkles, Copy, Download, X, HelpCircle, PhoneCall, Info, Eye, ChevronUp, ChevronDown } from 'lucide-react';
 import './App.css';
 
 const getLocalStorageValue = (key, defaultValue) => {
@@ -17,6 +17,7 @@ const getLocalStorageValue = (key, defaultValue) => {
 };
 
 export default function App() {
+  const [showMobilePreview, setShowMobilePreview] = useState(false);
   const [year, setYear] = useState(() => getLocalStorageValue('salon_year', new Date().getFullYear()));
   const [month, setMonth] = useState(() => getLocalStorageValue('salon_month', new Date().getMonth() + 1));
   const [theme, setTheme] = useState(() => {
@@ -331,8 +332,26 @@ export default function App() {
         />
       </aside>
 
+      {/* 手機版半透明背景遮罩 */}
+      <div 
+        className={`preview-backdrop ${showMobilePreview ? 'is-open' : ''}`}
+        onClick={() => setShowMobilePreview(false)}
+      />
+
       {/* 2. 右側預覽畫布區 */}
-      <main className="preview-area" ref={previewAreaRef}>
+      <main className={`preview-area ${showMobilePreview ? 'is-open' : ''}`} ref={previewAreaRef}>
+        {/* 手機版抽屜頂部把手與關閉按鈕 */}
+        <div className="mobile-preview-header">
+          <div className="drawer-handle" />
+          <button 
+            className="mobile-preview-close-btn"
+            onClick={() => setShowMobilePreview(false)}
+          >
+            <ChevronDown size={18} />
+            <span>收起預覽表</span>
+          </button>
+        </div>
+
         <div className="preview-header-indicator">
           <span className="pulse-dot" />
           <span>
@@ -386,6 +405,16 @@ export default function App() {
           <span>手機端若畫面有溢出，可上下滑動檢視，產出圖片將完美切齊。</span>
         </div>
       </main>
+
+      {/* 手機版浮動展開預覽按鈕 */}
+      <button 
+        className="mobile-preview-toggle-btn"
+        onClick={() => setShowMobilePreview(true)}
+      >
+        <Eye size={16} />
+        <span>查看即時預覽</span>
+        <ChevronUp size={16} />
+      </button>
 
       {/* 3. 匯出高畫質成果 Modal 視窗 */}
       {showExportModal && (
