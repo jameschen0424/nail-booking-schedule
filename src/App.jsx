@@ -300,13 +300,23 @@ export default function App() {
       {/* 1. 左側控制台 */}
       <aside className="sidebar-editor">
         <div className="app-header">
-          <div className="app-logo-icon">
-            <Sparkles size={20} />
+          <div className="app-header-brand">
+            <div className="app-logo-icon">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <h1>美業預約表產生器</h1>
+              <p>Aesthetic Schedule Designer</p>
+            </div>
           </div>
-          <div>
-            <h1>美業預約表產生器</h1>
-            <p>Aesthetic Schedule Designer</p>
-          </div>
+          {/* 右上角導出按鈕 */}
+          <button 
+            className="header-export-btn"
+            onClick={handleExport}
+          >
+            <Sparkles size={14} />
+            <span>產出圖片</span>
+          </button>
         </div>
 
         <EditorPanel 
@@ -328,7 +338,6 @@ export default function App() {
           customBgUrl={customBgUrl} setCustomBgUrl={setCustomBgUrl}
           logoImgUrl={logoImgUrl} setLogoImgUrl={setLogoImgUrl}
           hideBrandText={hideBrandText} setHideBrandText={setHideBrandText}
-          onExportPng={handleExport}
         />
       </aside>
 

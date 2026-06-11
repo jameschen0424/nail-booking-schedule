@@ -37,8 +37,7 @@ export default function EditorPanel({
   scheduleData, setScheduleData,
   customBgUrl, setCustomBgUrl,
   logoImgUrl, setLogoImgUrl,
-  hideBrandText, setHideBrandText,
-  onExportPng
+  hideBrandText, setHideBrandText
 }) {
   const [inputText, setInputText] = useState('');
   const [ocrLoading, setOcrLoading] = useState(false);
@@ -856,16 +855,6 @@ export default function EditorPanel({
 
       </div>
 
-      {/* 底部導出按鈕 */}
-      <div className="editor-footer">
-        <button 
-          className="btn btn-primary w-full btn-lg"
-          onClick={onExportPng}
-        >
-          <Sparkles size={18} style={{ marginRight: '8px' }} />
-          產出高畫質預約表圖片 (PNG)
-        </button>
-      </div>
     </div>
   );
 }

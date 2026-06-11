@@ -112,11 +112,49 @@ body {
 
 /* 標題列 */
 .app-header {
-  padding: 28px 32px;
+  padding: 24px 32px;
   border-bottom: 1px solid var(--border-glass);
   display: flex;
   align-items: center;
+  justify-content: space-between; /* 讓標題與產出按鈕分居左右兩端 */
   gap: 14px;
+  box-sizing: border-box;
+}
+
+/* 標題欄內部的品牌區域 */
+.app-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* 右上角導出按鈕 */
+.header-export-btn {
+  background: #5C4533;
+  color: #FAF8F5;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(92, 69, 51, 0.12);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header-export-btn:hover {
+  background: #463223;
+  box-shadow: 0 6px 16px rgba(92, 69, 51, 0.22);
+  transform: translateY(-1px);
+}
+
+.header-export-btn:active {
+  background: #3c2a1c;
+  transform: translateY(0) scale(0.96);
 }
 
 .app-logo-icon {
@@ -1087,6 +1125,10 @@ input[type="checkbox"] {
     flex-direction: column;
     height: auto;
     overflow: visible !important; /* 確保手機端可正常向下滾動檢視所有內容，避免被隱藏 */
+  }
+
+  .app-header {
+    padding: 16px 20px !important; /* 手機端更緊湊的標題邊界，為產出按鈕留出適當空間 */
   }
 
   .sidebar-editor {
