@@ -192,7 +192,7 @@ export default function App() {
       lastWindowSizeRef.current = { width: currentWidth, height: currentHeight };
       
       const parentWidth = isMobile ? (currentWidth - 32) : (el.clientWidth - 40); // 左右 padding
-      const parentHeight = el.clientHeight - 120; // 上下 標示與邊界
+      const parentHeight = isMobile ? ((el.clientHeight || window.innerHeight) - 100) : (el.clientHeight - 120); // 手機版預留 100px 做為頂底導覽與安全區，桌機版預留 120px
       
       const DIMENSIONS = {
         'story': { width: 540, height: 960 },
@@ -204,8 +204,8 @@ export default function App() {
       const scaleX = parentWidth / size.width;
       const scaleY = parentHeight / size.height;
       
-      // 手機版高度為自適應滾動，僅依據寬度縮放以防止無限迴圈導致網頁卡死
-      let factor = isMobile ? scaleX : Math.min(scaleX, scaleY);
+      // 同時限制寬高，確保圖片在手機滿版預覽中也能完全顯現而無需滾動/拖移
+      let factor = Math.min(scaleX, scaleY);
       if (factor > 1.1) factor = 1.1; // 上限
       if (factor < 0.15) factor = 0.15; // 下限
       
@@ -349,18 +349,28 @@ export default function App() {
 
       {/* 2. 右側預覽畫布區 */}
       <main className={`preview-area ${showMobilePreview ? 'is-open' : ''}`} ref={previewAreaRef}>
-        {/* 手機版抽屜頂部把手與關閉按鈕 */}
+        {/* 手機版抽屜頂部導覽列（左右排列，節省高度空間） */}
         <div className="mobile-preview-header">
-          <div className="drawer-handle" />
+          <div className="mobile-preview-title">
+            <span className="pulse-dot" />
+            <span>
+              {aspectRatio === 'story' 
+                ? 'IG 限時動態預覽' 
+                : aspectRatio === 'post-portrait' 
+                ? 'IG 直式貼文預覽' 
+                : 'IG 方形貼文預覽'}
+            </span>
+          </div>
           <button 
             className="mobile-preview-close-btn"
             onClick={() => setShowMobilePreview(false)}
           >
-            <ChevronDown size={18} />
-            <span>收起預覽表</span>
+            <ChevronDown size={16} />
+            <span>收起</span>
           </button>
         </div>
 
+        {/* 桌面版標示（在手機端會被 CSS 隱藏以省去垂直空白） */}
         <div className="preview-header-indicator">
           <span className="pulse-dot" />
           <span>
@@ -372,46 +382,49 @@ export default function App() {
           </span>
         </div>
 
-        {/* 縮放 wrapper 確保在小螢幕能看到全貌，並加上左右負邊距補償，避免 layout width 溢出導致手機版左右滑動異常 */}
-        <div 
-          className="preview-scaler-container"
-          style={{
-            transform: `scale(${scaleFactor})`,
-            width: `540px`,
-            height: `${aspectRatio === 'story' ? 960 : aspectRatio === 'post-portrait' ? 675 : 540}px`,
-            marginTop: `${(scaleFactor - 1) * (aspectRatio === 'story' ? 480 : aspectRatio === 'post-portrait' ? 337.5 : 270)}px`,
-            marginBottom: `${(scaleFactor - 1) * (aspectRatio === 'story' ? 480 : aspectRatio === 'post-portrait' ? 337.5 : 270)}px`,
-            marginLeft: `${(scaleFactor - 1) * 270}px`,
-            marginRight: `${(scaleFactor - 1) * 270}px`
-          }}
-        >
-          <PreviewCanvas 
-            year={year}
-            month={month}
-            theme={theme}
-            aspectRatio={aspectRatio}
-            fontStyle={fontStyle}
-            title={title}
-            titleEn={titleEn}
-            brandName={brandName}
-            slogan={slogan}
-            staffName={staffName}
-            subSlogan={subSlogan}
-            notes={notes}
-            qrUrl={qrUrl}
-            qrText={qrText}
-            scheduleData={scheduleData}
-            customBgUrl={customBgUrl}
-            logoImgUrl={logoImgUrl}
-            hideBrandText={hideBrandText}
-            exportRef={exportRef}
-          />
+        {/* 畫布彈性置中包裝器 */}
+        <div className="preview-canvas-wrapper">
+          {/* 縮放 wrapper 確保在小螢幕能看到全貌，並加上左右負邊距補償，避免 layout width 溢出導致手機版左右滑動異常 */}
+          <div 
+            className="preview-scaler-container"
+            style={{
+              transform: `scale(${scaleFactor})`,
+              width: `540px`,
+              height: `${aspectRatio === 'story' ? 960 : aspectRatio === 'post-portrait' ? 675 : 540}px`,
+              marginTop: `${(scaleFactor - 1) * (aspectRatio === 'story' ? 480 : aspectRatio === 'post-portrait' ? 337.5 : 270)}px`,
+              marginBottom: `${(scaleFactor - 1) * (aspectRatio === 'story' ? 480 : aspectRatio === 'post-portrait' ? 337.5 : 270)}px`,
+              marginLeft: `${(scaleFactor - 1) * 270}px`,
+              marginRight: `${(scaleFactor - 1) * 270}px`
+            }}
+          >
+            <PreviewCanvas 
+              year={year}
+              month={month}
+              theme={theme}
+              aspectRatio={aspectRatio}
+              fontStyle={fontStyle}
+              title={title}
+              titleEn={titleEn}
+              brandName={brandName}
+              slogan={slogan}
+              staffName={staffName}
+              subSlogan={subSlogan}
+              notes={notes}
+              qrUrl={qrUrl}
+              qrText={qrText}
+              scheduleData={scheduleData}
+              customBgUrl={customBgUrl}
+              logoImgUrl={logoImgUrl}
+              hideBrandText={hideBrandText}
+              exportRef={exportRef}
+            />
+          </div>
         </div>
 
         {/* 移動端匯出指示 */}
-        <div style={{ marginTop: '20px', display: 'flex', gap: '8px', alignItems: 'center', opacity: 0.6, fontSize: '11px' }}>
-          <Info size={14} />
-          <span>手機端若畫面有溢出，可上下滑動檢視，產出圖片將完美切齊。</span>
+        <div className="mobile-preview-footer">
+          <Info size={13} />
+          <span>此為即時版面預覽，點擊右上角「下載圖片」即可存檔</span>
         </div>
       </main>
 
