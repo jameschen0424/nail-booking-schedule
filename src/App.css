@@ -1137,8 +1137,9 @@ input[type="checkbox"] {
 
   .app-container {
     flex-direction: column;
-    height: auto;
-    overflow: visible !important; /* 確保手機端可正常向下滾動檢視所有內容，避免被隱藏 */
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
   }
 
   .app-header {
@@ -1149,8 +1150,8 @@ input[type="checkbox"] {
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    height: auto;
-    min-height: 100vh; /* 確保在任何長高視窗中編輯器面板都填滿整頁高度，防止底部出現黑邊隙縫 */
+    height: 100vh !important;
+    max-height: 100vh !important;
     border-right: none;
     border-bottom: 1px solid var(--border-glass);
     box-shadow: 0 10px 30px rgba(108, 83, 63, 0.05);
@@ -1158,15 +1159,25 @@ input[type="checkbox"] {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     background: #FAF8F5;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
   }
 
   .editor-panel {
-    height: auto;
-    max-height: 600px;
+    flex-grow: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: hidden !important;
   }
 
   .tab-content {
-    max-height: 420px;
+    flex-grow: 1 !important;
+    overflow-y: auto !important;
+    max-height: none !important;
+    padding: 16px 20px 80px 20px !important; /* 底部預留 80px，防止懸浮按鈕擋住下方欄位與解析按鈕 */
   }
 
   .preview-backdrop {
