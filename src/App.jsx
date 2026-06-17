@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { toPng } from 'html-to-image';
+import { toBlob } from 'html-to-image';
 import { THEMES } from './utils/themes';
 import EditorPanel from './components/EditorPanel';
 import PreviewCanvas from './components/PreviewCanvas';
@@ -59,6 +59,7 @@ export default function App() {
   const [exportLoading, setExportLoading] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportedImageSrc, setExportedImageSrc] = useState('');
+  const [exportedImageBlob, setExportedImageBlob] = useState(null);
   
   const previewAreaRef = useRef(null);
   const exportRef = useRef(null);
@@ -224,7 +225,7 @@ export default function App() {
     };
   }, [aspectRatio]);
 
-  // 導出為 PNG
+  // 導出為 PNG (使用 toBlob 優化生成效能與手機相簿相容性)
   const handleExport = async () => {
     if (!exportRef.current) return;
     setExportLoading(true);
@@ -240,10 +241,9 @@ export default function App() {
       };
       const size = DIMENSIONS[aspectRatio] || DIMENSIONS.story;
 
-      // 導出 2.5 倍解析度 確保極致清晰度
-      const dataUrl = await toPng(exportRef.current, {
-        pixelRatio: 2.5,
-        cacheBust: true,
+      // 導出 2.0 倍解析度，剛好符合 IG Story 的 1080x1920 標準高畫質，速度提升一倍，且 Blob 物件相容於 iOS/Android 長按存相簿
+      const blob = await toBlob(exportRef.current, {
+        pixelRatio: 2.0,
         style: {
           transform: 'scale(1)',
           transformOrigin: 'top left',
@@ -252,7 +252,14 @@ export default function App() {
         }
       });
 
-      setExportedImageSrc(dataUrl);
+      // 釋放舊的 Blob URL 避免記憶體洩漏
+      if (exportedImageSrc && exportedImageSrc.startsWith('blob:')) {
+        URL.revokeObjectURL(exportedImageSrc);
+      }
+
+      const blobUrl = URL.createObjectURL(blob);
+      setExportedImageBlob(blob);
+      setExportedImageSrc(blobUrl);
       setShowExportModal(true);
     } catch (error) {
       console.error('Failed to export image:', error);
@@ -262,23 +269,42 @@ export default function App() {
     }
   };
 
-  // 下載檔案
-  const downloadImage = () => {
+  // 下載檔案 (手機端優先開啟系統分享選單儲存相簿，桌機端直接下載)
+  const downloadImage = async () => {
+    if (!exportedImageSrc) return;
+
+    // 手機端 (iOS/Android) 優先使用 Web Share API，使用者可以直接點選系統選單中的「儲存影像」以存入相簿
+    if (navigator.share && navigator.canShare && exportedImageBlob) {
+      const file = new File([exportedImageBlob], `${year}年${month}月預約空檔表_${staffName}.png`, { type: 'image/png' });
+      if (navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: '美甲預約空檔表',
+            text: '美業預約表產生器'
+          });
+          return;
+        } catch (err) {
+          console.warn('Share cancelled or failed, falling back to download:', err);
+          if (err.name === 'AbortError') return; // 用戶取消分享直接返回
+        }
+      }
+    }
+
+    // 桌機端或不支援 Web Share 的環境，使用傳統下載連結儲存到硬碟
     const link = document.createElement('a');
     link.download = `${year}年${month}月預約空檔表_${staffName}.png`;
     link.href = exportedImageSrc;
     link.click();
   };
 
-  // 複製到剪貼簿 (現代瀏覽器支援)
+  // 複製到剪貼簿 (直接使用已生成的 Blob，省去 fetch 網路請求，速度極快)
   const copyImageToClipboard = async () => {
+    if (!exportedImageBlob) return;
     try {
-      const response = await fetch(exportedImageSrc);
-      const blob = await response.blob();
-      
       await navigator.clipboard.write([
         new ClipboardItem({
-          [blob.type]: blob
+          [exportedImageBlob.type]: exportedImageBlob
         })
       ]);
       alert('預約表已複製到剪貼簿！可直接貼上 (Ctrl+V) 至 Line/IG 等通訊軟體。');
@@ -286,6 +312,16 @@ export default function App() {
       console.error('Clipboard copy failed:', err);
       alert('您的瀏覽器不支援直接複製圖片，請使用下載或在圖片上長按儲存！');
     }
+  };
+
+  // 關閉 Modal 並釋放 Blob URL 記憶體
+  const handleCloseExportModal = () => {
+    setShowExportModal(false);
+    if (exportedImageSrc && exportedImageSrc.startsWith('blob:')) {
+      URL.revokeObjectURL(exportedImageSrc);
+    }
+    setExportedImageSrc('');
+    setExportedImageBlob(null);
   };
 
   return (
@@ -472,7 +508,7 @@ export default function App() {
             <button 
               className="btn btn-secondary w-full" 
               style={{ marginTop: '12px', background: 'transparent', border: 'none' }}
-              onClick={() => setShowExportModal(false)}
+              onClick={handleCloseExportModal}
             >
               <X size={16} style={{ marginRight: '6px' }} />
               返回修改
