@@ -105,7 +105,7 @@ export default function PreviewCanvas({
     slotPadding: isStory ? (isCompactGrid ? '1.5px 3px' : '2px 4px') : isPortrait ? (isCompactGrid ? '1px 1.5px' : '1.5px 2px') : (isCompactGrid ? '0.5px 1px' : '1px 2px'),
     cellPadding: isStory ? (isCompactGrid ? '2.5px' : '4px') : isPortrait ? '2px' : '1px',
     
-    footerHeight: isStory ? (isCompactGrid ? '100px' : '115px') : isPortrait ? (isCompactGrid ? '80px' : '90px') : (isCompactGrid ? '70px' : '78px'),
+    footerHeight: isStory ? (isCompactGrid ? '102px' : '118px') : isPortrait ? (isCompactGrid ? '80px' : '90px') : (isCompactGrid ? '70px' : '78px'),
     footerNotesFontSize: isStory ? (isCompactGrid ? '9px' : '10.5px') : isPortrait ? '8.5px' : '7.5px',
     footerNotesLineHeight: isStory ? (isCompactGrid ? '1.35' : '1.5') : isPortrait ? '1.3' : '1.15',
     footerLogoFontSize: isStory ? '14px' : isPortrait ? '10px' : '8.5px',
@@ -698,7 +698,7 @@ export default function PreviewCanvas({
             backgroundColor: themeColors.cardBg,
             border: `1.5px solid ${themeColors.border}`,
             borderRadius: '18px',
-            padding: isStory ? '12px 16px' : isPortrait ? '10px 12px' : '8px 10px',
+            padding: isStory ? '8px 16px' : isPortrait ? '10px 12px' : '8px 10px',
             boxShadow: '0 8px 30px rgba(108, 83, 63, 0.04)',
             height: scale.footerHeight,
             boxSizing: 'border-box',
@@ -736,13 +736,15 @@ export default function PreviewCanvas({
               }}>
                 {notesList.slice(0, isSquare ? 2 : 4).map((item, idx) => (
                   <li key={idx} style={{ 
-                    marginBottom: '1px', 
+                    margin: 0,
+                    padding: 0,
+                    marginBottom: '1.5px', 
                     overflow: 'hidden', 
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
-                    lineHeight: 1.25
+                    lineHeight: 1.2
                   }}>
                     {item}
                   </li>
