@@ -734,7 +734,7 @@ export default function PreviewCanvas({
                 listStyleType: 'disc',
                 color: themeColors.textPrimary
               }}>
-                {notesList.slice(0, isSquare ? 2 : 3).map((item, idx) => (
+                {notesList.slice(0, isSquare ? 2 : 4).map((item, idx) => (
                   <li key={idx} style={{ 
                     marginBottom: '1px', 
                     overflow: 'hidden', 
@@ -759,7 +759,7 @@ export default function PreviewCanvas({
 
             {/* 2. 中間：品牌商標 Logo */}
             <div style={{
-              flex: isStory ? '0 0 140px' : isPortrait ? '0 0 120px' : '0 0 100px',
+              flex: isStory ? '0 0 100px' : isPortrait ? '0 0 90px' : '0 0 80px',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -888,7 +888,7 @@ export default function PreviewCanvas({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: 3,
+                    WebkitLineClamp: 4,
                     WebkitBoxOrient: 'vertical',
                     wordBreak: 'break-all',
                     whiteSpace: 'pre-line'
